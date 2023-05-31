@@ -6,9 +6,17 @@ module.exports = {
   theme: {
     extend: {
       colors:{
-        dark: "#121212"
+        dark: "#2C343E",
+        nav: "#445262",
+        navButton: "#5A6879",
+        danger: "#F32013",
+        list: "#394351"
       }
     },
+    fontFamily: {
+      title: ["wix-bold"],
+      navButton: ["wix-reg"]
+    }
   },
   plugins: [],
 }
