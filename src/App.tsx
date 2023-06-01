@@ -58,7 +58,7 @@ function App() { //add routes to make current page stuff so if reload, still on 
     }
   }
 
-  function handleLogin():void {
+  function handleLogin(event: any):void {
     if (loggedIn === 1) {
       setCurrentPage(0)
     }
@@ -72,15 +72,18 @@ function App() { //add routes to make current page stuff so if reload, still on 
     else {
       alert("Invalid Email or Password")
     }
+    event.preventDefault()
   }
   //function to check cookies if logged in
   //function to set logged in when user logs in
 
   function handleCreate():void {
+    setLoginPage(0)
     setCurrentPage(1)
   }
 
   function handleHome(): void {
+    setLoginPage(0)
     setCurrentPage(0)
   }
 
@@ -91,12 +94,13 @@ function App() { //add routes to make current page stuff so if reload, still on 
   }
 
   function handleLogOut():void {
+    setLoginPage(0)
     setLoggedIn(0)
     setCurrentPage(0)
   }
 
   return (
-    <body className='w-screen h-screen bg-dark'>
+    <div className='w-screen h-screen bg-dark'>
       {currentPage === page["home"]? <><NavBarFull></NavBarFull><HomePage></HomePage></> : <></>}
       {currentPage === page["schedule"]?
       <div>
@@ -114,7 +118,7 @@ function App() { //add routes to make current page stuff so if reload, still on 
           <NavBarFull></NavBarFull>
           <Login password = {password} username = {username} switchPage = {switchLoginPage} loginPage = {loginPage} handleSignup = {handleSignup} handleUsername = {handleUsername} handlePassword = {handlePassword} handleLogin = {handleLogin}></Login>
       </div> : <></>}
-    </body>
+    </div>
   );
 }
 

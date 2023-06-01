@@ -1,6 +1,7 @@
 import React from 'react';
 import { SketchPicker } from 'react-color';
 import { useState } from 'react';
+import arrow from "../assets/arrow-right-solid.png"
 
 function colorPicker() {
   const [color, setColor] = useState({background:"#fcba03"})

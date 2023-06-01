@@ -3,7 +3,6 @@ function Signup(props: any) {
         <div className="flex justify-center mt-16 text-white">
         <div className="bg-nav flex flex-col items-center" style = {{
         borderRadius: "10px",
-        height: "80vh",
         width: "40vw",
         padding: "30px"
         }}>
@@ -17,9 +16,9 @@ function Signup(props: any) {
                         <div style={{marginBottom: "10px"}}>Password</div>
                         <input defaultValue = {props.password} onChange = {event => {props.handlePassword(event)}} type = "password" className="bg-list rounded-md" style={{height: "50px", padding: "10px", width: "30vw"}}></input>
                 </div>
-                <button type = "submit" onClick = {props.handleLogin} className="bg-list text-center text-white border-list border-2 p-2 rounded-md hover: cursor-pointer" style={{width: "30vw"}}>Sign Up</button>
-                <div className="flex justify-center mt-10">
-                    <div className = "hover: cursor-pointer" onClick={() => props.switchPage(0)}>Already have an account?</div>
+                <button type = "submit" onClick = {event => {props.handleLogin(event)}} className="bg-list text-center text-white border-list border-2 p-2 rounded-md hover: cursor-pointer" style={{width: "30vw"}}>Sign Up</button>
+                <div className="flex justify-center mt-10 mb-5">
+                    <div className = "hover: cursor-pointer underline" onClick={() => props.switchPage(0)}>Already have an account?</div>
                 </div>
            </form>
         </div>
