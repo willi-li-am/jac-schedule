@@ -10,4 +10,23 @@
   font-family: "wix-reg";
   src: url("./fonts/WixMadeforDisplay-Regular.ttf") format("truetype");
 }
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #000000 #2C343E;
+}
 
+/* Chrome, Edge and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+  width: 8px;
+}
+*::-webkit-scrollbar-track {
+  border-radius: 100px;
+  background-color: #5A6879;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-color: #24282D;
+}

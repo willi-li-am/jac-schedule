@@ -6,8 +6,13 @@ import Settings from './components/settings';
 import Login from './components/login';
 import CoursePick from './components/coursePick';
 import HomePage from './components/homePage';
+import { BrowserRouter, Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { useEffect } from 'react';
+import NoPage from './components/noPage';
 
 function App() { //add routes to make current page stuff so if reload, still on schedule page
+
+  const navigate = useNavigate()
 
   const page = {
     "home": 0,
@@ -16,11 +21,20 @@ function App() { //add routes to make current page stuff so if reload, still on 
     "login": 3
   }
 
-  const [loggedIn, setLoggedIn] = useState(0)
-  const [currentPage, setCurrentPage] = useState(0) //0 for homepage, 1 for schedule, 2 for settings
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+  const [loggedIn, setLoggedIn] = useState(false)
   const [loginPage, setLoginPage] = useState(0)
+  const [courseList, setCourseList] = useState("")
+  const [inputCode, setInputCode] = useState("")  
+  const [courseInfo, setCourseInfo]:any = useState("")
+  const [coursePicked, setCoursePicked]:any = useState([])
+  const [schedule, setSchedule] = useState({
+    M: [],
+    T: [],
+    W: [],
+    R: [],
+    F: []
+  })
+  const [courseIndexPicked, setCourseIndexPicked] = useState({})
 
   function switchLoginPage(target: number) {
     if (target === 1) {
@@ -31,60 +45,26 @@ function App() { //add routes to make current page stuff so if reload, still on 
     }
   }   
 
-
-  function handlePassword(event: any): void {
-    setPassword( event.target.value )
-  }
-
-  function handleUsername(event: any): void {
-    setUsername( event.target.value )
-  }
-
-  const account: any = {
-    "Admin": "Password"
-  }
-
-  function handleSignup() {
-    console.log(username)
-    console.log(password)
-  }
-
   function handleLoginSetting():void {
-    if (loggedIn === 0) { //function to log in
-      setCurrentPage(3)
+    if (!loggedIn) { //function to log in
+      navigate("/login")
     }
-    else if (loggedIn === 1){ //function to log out
-      setCurrentPage(2)
+    else if (loggedIn){ //function to log out
+      navigate("/settings")
     }
   }
 
-  function handleLogin(event: any):void {
-    if (loggedIn === 1) {
-      setCurrentPage(0)
-    }
-    else if (account[username] === password){
-      setLoggedIn(1) //do authentication and what not, hash the password
-      setCurrentPage(0)
-    }
-    else if(username === "" || password === ""){
-      alert("Empty Email or Password")
-    }
-    else {
-      alert("Invalid Email or Password")
-    }
-    event.preventDefault()
-  }
+
   //function to check cookies if logged in
   //function to set logged in when user logs in
 
   function handleCreate():void {
     setLoginPage(0)
-    setCurrentPage(1)
   }
 
   function handleHome(): void {
     setLoginPage(0)
-    setCurrentPage(0)
+    navigate("/")
   }
 
   function NavBarFull() {
@@ -95,31 +75,21 @@ function App() { //add routes to make current page stuff so if reload, still on 
 
   function handleLogOut():void {
     setLoginPage(0)
-    setLoggedIn(0)
-    setCurrentPage(0)
+    setLoggedIn(!loggedIn)
+    navigate("/")
   }
 
-  return (
-    <div className='w-screen h-screen bg-dark'>
-      {currentPage === page["home"]? <><NavBarFull></NavBarFull><HomePage></HomePage></> : <></>}
-      {currentPage === page["schedule"]?
-      <div>
-        <NavBarFull></NavBarFull>
-        <CoursePick></CoursePick>
-      </div>  
-      : <></>}
-      {currentPage === page["settings"]? 
-      <div>
-          <NavBarFull></NavBarFull>
-          <Settings handleLogOut = {handleLogOut}></Settings>
-      </div> : <></>}
-      {currentPage === page["login"]? 
-      <div>
-          <NavBarFull></NavBarFull>
-          <Login password = {password} username = {username} switchPage = {switchLoginPage} loginPage = {loginPage} handleSignup = {handleSignup} handleUsername = {handleUsername} handlePassword = {handlePassword} handleLogin = {handleLogin}></Login>
-      </div> : <></>}
-    </div>
-  );
+  return(
+
+    <Routes>
+      <Route path='/' element = {<><NavBarFull></NavBarFull><HomePage></HomePage></>}/>
+      <Route path='/create' element={<><NavBarFull></NavBarFull><CoursePick courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} setInputCode = {setInputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked}></CoursePick></>}/>
+      {loggedIn? <Route path='/settings' element = {<><NavBarFull></NavBarFull><Settings handleLogOut = {handleLogOut}></Settings></>}/> : <Route path='/settings' element = {<Navigate to = "/" replace></Navigate>}/>}
+      {loggedIn? <Route path = "/login" element = {<Navigate to = "/" replace></Navigate>}></Route> : <Route path='/login' element = {<><NavBarFull></NavBarFull><Login setLoggedIn = {setLoggedIn} loggedIn = {loggedIn} switchPage = {switchLoginPage} loginPage = {loginPage}></Login></>}/> }
+      <Route path='*' element = {<><NavBarFull></NavBarFull><NoPage></NoPage></>}></Route>
+    </Routes>
+    
+  )
 }
 
 export default App;

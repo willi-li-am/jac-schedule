@@ -7,10 +7,12 @@ module.exports = {
     extend: {
       colors:{
         dark: "#2C343E",
+        darker: "#292E34",
         nav: "#445262",
         navButton: "#5A6879",
         danger: "#F32013",
-        list: "#394351"
+        list: "#394351",
+        na: "#B8B8B8"
       }
     },
     fontFamily: {
