@@ -9,7 +9,7 @@ function NavBar(props: any) {
 
     function Bar(props: any) {
         return(
-            <div className = "w-full bg-nav flex items-center justify-between text-white pl-5 pr-5" style={{height: "60px"}}>
+            <div className = "sticky top-0 w-full bg-nav flex items-center justify-between text-white pl-5 pr-5" style={{height: "60px"}}>
                 <div className='flex'>
                     <Link to = "/" className="font-title text-xl hover: cursor-pointer">JAC Schedule Builder</Link>
                     <div>

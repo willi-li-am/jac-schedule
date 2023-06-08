@@ -4,18 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight, faUser, faStar, faPencil, faHashtag, faArrowUpRightFromSquare, faChalkboard, faFlask, faTag, faMinus, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from "react"
 import ColorPicker from "./colorPicker"
+import { BeatLoader, ClipLoader, MoonLoader } from "react-spinners"
 
-
-function sectionMaker(input: number): string{
-    if (input/10000 >= 1) return input.toString()
-    if (input/1000 >= 1) return ("0" + input)
-    if (input/100 >= 1) return ("00" + input)
-    if (input/10 >= 1) return ("000" + input)
-    return ("0000" + input)
-}
 
 function CoursePick(prop: any) {
     const [showColor, setShowColor] :any = useState({})
+    const [loading, setLoading]: any = useState(false)
 
     if(prop.lastPage !== "/create") {
         prop.setLastPage("/create")
@@ -52,6 +46,15 @@ function CoursePick(prop: any) {
         FS: "",
         FE: ""
     }
+
+    function sectionMaker(input: number): string{
+        if (input/10000 >= 1) return input.toString()
+        if (input/1000 >= 1) return ("0" + input)
+        if (input/100 >= 1) return ("00" + input)
+        if (input/10 >= 1) return ("000" + input)
+        return ("0000" + input)
+    }
+    
 
     function handleViewCourse(input: string) {
         let viewCourseObj = viewCourse
@@ -371,6 +374,9 @@ function CoursePick(prop: any) {
         return courseObj
     } 
     
+    useEffect(() => {
+        getClassList("JAC")
+    }, [])
 
     useEffect(() => {
         const handleTabClose = (event: any) => {
@@ -656,46 +662,46 @@ function CoursePick(prop: any) {
     }
 
     async function getClassList(school_id:string){
+        setLoading(true)
         let response: any
         try{
-            await fetch("https://jacschedule-api.vercel.app/course/search/" + school_id)
-            .then((r) => r.status === 200? response = r : response = false)
-
-        }
-        catch {
-            
-        }
-        for(let i = 0; i < 2; i++){
-            if (response === false){
-                try{
-                    await fetch("https://jacschedule-api.vercel.app//course/search/" + school_id)
-                    .then((r) => r.status === 200? response = r : response = false)
-        
-                }
-                catch {
+            response = await fetch("https://jacschedule-api.vercel.app/course/search/" + school_id) 
+            if (response.status !== 200) response = false
+            for(let i = 0; i < 2; i++){
+                if (response === false){
+                    
+                        await fetch("https://jacschedule-api.vercel.app/course/search/" + school_id)
+                        .then((r) => r.status === 200? response = r : response = false)
 
                 }
+                else if (response.status === 200){
+                    setTimeout(() => setLoading(false), 200)
+                    let json = await response.json()
+                    prop.setCourseList(json)
+                    return json
+                }
             }
-            else if (response.status === 200){
-                let json = await response.json()
-                prop.setCourseList(json)
-                return
-            }
-        }  
+        } 
+        catch{
+            setLoading(false)
+            alert("Failed to request course information, please try again later")
+        }
+        setLoading(false)
         alert("Failed to request course information, please try again later")
          //try to fix 2 time fetch
     }
 
 
     async function handleFormSubmit (event: any, courseList: any, school_id:string) {
+        setLoading(true)
         event.preventDefault()
         let code = prop.inputCode.current.value.toUpperCase()
         let courseInfoJson: any
+        let response:any = prop.courseList
         if (prop.courseList === ""){
-            getClassList(school_id)
-            
+            response = await getClassList(school_id)
         }
-        if (courseList.includes(code) && !prop.coursePicked.includes(code)){
+        if (response.includes(code) && !prop.coursePicked.includes(code)){
             if(code in prop.courseInfoCache){
 
                 let input = [code, ...prop.coursePicked]
@@ -706,49 +712,68 @@ function CoursePick(prop: any) {
                 prop.setCourseInfo(courseInfoInput)
 
                 prop.inputCode.current.value = ""
+                setLoading(false)
             }
             else {
                 try{
                     //fetch again if courselist is empty
-                    await fetch("https://jacschedule-api.vercel.app/course/" + school_id + "/" + code)
-                        .then((response) => response.status === 200? response.json() : alert("Unable to Retrieve Course Information, please try again"))
-                        .then((json) => {courseInfoJson = json})
-                    let input = [code, ...prop.coursePicked]
-                    prop.setCoursePicked(input)
-    
-                    let courseInfoInput = [courseInfoJson, ...prop.courseInfo]
-                    prop.setCourseInfo(courseInfoInput)
+            
+                    response = await fetch("https://jacschedule-api.vercel.app/" + school_id + "/" + code)
+                    
+                    if (response.status !== 200) response = false
+                    for(let i = 0; i < 2; i++){
+                        if (response === false){
+                            
+                             await fetch("https://jacschedule-api.vercel.app/course/" + school_id + "/" + code)
+                                .then((r) => r.status === 200? response = r : response = false)
 
-                    let cache = prop.courseInfoCache
-                    cache[code] = courseInfoJson
-                    prop.setCourseInfoCache(cache)
+                        }
+                        else if (response.status === 200){
+                            courseInfoJson = await response.json()
+                            let input = [code, ...prop.coursePicked]
+                            prop.setCoursePicked(input)
+            
+                            let courseInfoInput = [courseInfoJson, ...prop.courseInfo]
+                            prop.setCourseInfo(courseInfoInput)
 
-                    let colors = prop.colorList
-                    colors[code] = {background: "#394351"}
+                            let cache = prop.courseInfoCache
+                            cache[code] = courseInfoJson
+                            prop.setCourseInfoCache(cache)
 
-                    prop.setColorList(colors)
-    
-                    prop.inputCode.current.value = ""
+                            let colors = prop.colorList
+                            colors[code] = {background: "#394351"}
+
+                            prop.setColorList(colors)
+            
+                            prop.inputCode.current.value = ""
+                            setLoading(false)
+                            return
+                        }
+                    }
                 }
                 catch{
+                    setLoading(false)
                     alert("Unable to Retrieve Course Information, please try again")
                 }
             }
         }
         else if (prop.coursePicked.includes(code)){
+            setLoading(false)
             alert("This course has already been added")
         }
-        else alert("Course does not exist. If it does then it may have not been written in format: XXX-XXX-XX or it's a technical program course (add custom course)")
-    }
-
-    if (prop.courseList === ""){
-        prop.setCourseList(" ")
-        getClassList("JAC")
+        else {
+            setLoading(false)
+            alert("Course does not exist. If it does then it may have not been written in format: XXX-XXX-XX or it's a technical program course (add custom course)")
+        }
     }
 
 
     return (
         <div>
+        {loading? <div className="absolute" style={{width: "100vw", height: "100vh", marginTop: "-60px", zIndex: 50}}>
+            <div className="absolute text-white font-title z-10"><div style={{width: "100vw", height: "100vh", fontSize: "5rem"}} className="flex items-center justify-center"><BeatLoader speedMultiplier={1} color="white" size={40}/></div></div>
+            <div className="bg-darker absolute opacity-60" style={{width: "100%", height: "100%"}}></div>
+        </div> : <></>}
         <div className="flex flex-col items-center bg-slate-700" style={{width: "30vw", padding: "10px"}}>
         <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{  fontSize: "15px"}} onClick={() => setViewCourseInput(!viewCourseInput)}>{viewCourseInput? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Course</div>
         {viewCourseInput? <>

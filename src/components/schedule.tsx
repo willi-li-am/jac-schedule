@@ -88,19 +88,19 @@ function Schedule (props: any) {
     return(
         <div className="flex text-white" style={{marginTop: "10px"}}>
             <div className = "bg-darker border-white flex flex-row"style={{width: "calc(70vw - 40px)", height: "calc(100vh - 150px)", marginLeft: "20px", marginRight: "20px", marginTop: ""}}>
-                <div className = "bg-dark" style={{minWidth:"60px", maxWidth: "60px", paddingRight: "10px", height: "100%", borderColor: "grey", fontSize: "16px"}}>
-                    <div className="flex flex-col justify-center" style={{marginTop: "18px", height: "calc(100% - 48px)"}}>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>8:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>9:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>10:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>11:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>12:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>13:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>14:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>15:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>16:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>17:00</div>
-                    <div className="flex flex-row-reverse items-center" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>18:00</div>
+                <div className = "bg-dark" style={{minWidth:"60px", maxWidth: "60px", paddingRight: "10px", height: "calc(100vh - 150px)", borderColor: "grey", fontSize: "16px"}}>
+                    <div className="flex flex-col justify-center" style={{marginTop: "32px", height: "calc(100vh - 198px)", fontSize: "16px"}}>
+                    <div className="flex flex-row-reverse" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>8:00</div>
+                    <div className="flex flex-row-reverse" style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>9:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>10:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>11:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>12:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>13:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>14:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>15:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>16:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>17:00</div>
+                    <div className="flex flex-row-reverse " style={{minHeight: "calc(100%/11)", maxHeight:"calc(100%/11)"}}>18:00</div>
                     </div>
                 </div>
                 <div className="flex flex-col w-full" style={{borderWidth: "4px", borderBottomWidth: "4px", borderColor: "white", width: "100%"}}>
