@@ -710,7 +710,7 @@ function CoursePick(prop: any) {
             else {
                 try{
                     //fetch again if courselist is empty
-                    await fetch("https://jacschedule-api.vercel.app//course/" + school_id + "/" + code)
+                    await fetch("https://jacschedule-api.vercel.app/course/" + school_id + "/" + code)
                         .then((response) => response.status === 200? response.json() : alert("Unable to Retrieve Course Information, please try again"))
                         .then((json) => {courseInfoJson = json})
                     let input = [code, ...prop.coursePicked]
