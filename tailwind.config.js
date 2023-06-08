@@ -12,7 +12,10 @@ module.exports = {
         navButton: "#5A6879",
         danger: "#F32013",
         list: "#394351",
-        na: "#B8B8B8"
+        na: "#B8B8B8",
+        link: "#3790FF",
+        av: "#58c75b",
+        imp: "#fff700"
       }
     },
     fontFamily: {

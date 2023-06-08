@@ -18,11 +18,11 @@ function Login(props: any) { //Make it that it doesnt return you to homepage
 
     function handleLogin(event: any):void {
         if (props.loggedIn) {
-          navigate("/")
+          navigate(props.lastPage)
         }
         else if (account[username] === password){
           props.setLoggedIn(!props.loggedIn) //do authentication and what not, hash the password
-          navigate("/")
+          navigate(props.lastPage)
         }
         else if(username === "" || password === ""){
             setError("Empty Email or Password")

@@ -1,19 +1,16 @@
-import React from 'react';
-import { SketchPicker } from 'react-color';
+import React, { useEffect, useRef } from 'react';
+import { ChromePicker, CirclePicker, CompactPicker, HuePicker, SketchPicker } from 'react-color';
 import { useState } from 'react';
 
 
-function colorPicker() {
-  const [color, setColor] = useState({background:"#fcba03"})
-  function handleColor(input:any):void {
-    setColor({background: input.hex})
-  }
+function ColorPicker(props: any) {
+  
   return (
-    <>
-      <div className='bg-dark text-white'>Hello World</div>
-      <div className='bg-black text-white'>Hello World</div>
-      <SketchPicker color = {color.background} onChange = {handleColor}></SketchPicker>
-      <div style={{backgroundColor: color.background, width: "100vw", height: "100vh"}}>Hello</div>
-    </>
+    <div style={{zIndex: "4"}} onMouseLeave={()=> {props.handleColorView(props.code, false)}}>
+      <div onClick={()=> {props.handleColorView(props.code)}} className='rounded-sm hover:cursor-pointer border-2 border-white' style={{backgroundColor: props.colorList[props.code].background, width: "25px", height: "25px"}}></div>
+      {props.showColor[props.code]? <div className = "absolute text-black z-10" style = {{marginLeft: "-100px"}} ><ChromePicker disableAlpha color = {props.colorList[props.code].background}  onChangeComplete = {(input) => props.handleColor(input, props.code)}></ChromePicker></div> : <></>}
+    </div>
   );
 }
+
+export default ColorPicker
