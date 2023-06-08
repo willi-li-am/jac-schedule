@@ -658,7 +658,7 @@ function CoursePick(prop: any) {
     async function getClassList(school_id:string){
         let response: any
         try{
-            await fetch("http://localhost:8080/course/search/" + school_id)
+            await fetch("https://jacschedule-api.vercel.app/course/search/" + school_id)
             .then((r) => r.status === 200? response = r : response = false)
 
         }
@@ -668,7 +668,7 @@ function CoursePick(prop: any) {
         for(let i = 0; i < 2; i++){
             if (response === false){
                 try{
-                    await fetch("http://localhost:8080/course/search/" + school_id)
+                    await fetch("https://jacschedule-api.vercel.app//course/search/" + school_id)
                     .then((r) => r.status === 200? response = r : response = false)
         
                 }
@@ -710,7 +710,7 @@ function CoursePick(prop: any) {
             else {
                 try{
                     //fetch again if courselist is empty
-                    await fetch("http://localhost:8080/course/" + school_id + "/" + code)
+                    await fetch("https://jacschedule-api.vercel.app//course/" + school_id + "/" + code)
                         .then((response) => response.status === 200? response.json() : alert("Unable to Retrieve Course Information, please try again"))
                         .then((json) => {courseInfoJson = json})
                     let input = [code, ...prop.coursePicked]
