@@ -9,6 +9,7 @@ import HomePage from './components/homePage';
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import NoPage from './components/noPage';
 import Schedule from './components/schedule';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() { //add routes to make current page stuff so if reload, still on schedule page
 
@@ -171,7 +172,7 @@ function handleColor(input:any, code: any):void {
 }
 
   return(
-
+    <>
     <Routes>
       <Route path='/' element = {<><NavBarFull></NavBarFull><HomePage lastPage = {lastPage} setLastPage = {setLastPage}></HomePage></>}/>
       <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull>
@@ -183,6 +184,8 @@ function handleColor(input:any, code: any):void {
       {loggedIn? <Route path = "/login" element = {<Navigate to = "/" replace></Navigate>}></Route> : <Route path='/login' element = {<><NavBarFull></NavBarFull><Login lastPage = {lastPage} setLoggedIn = {setLoggedIn} loggedIn = {loggedIn} switchPage = {switchLoginPage} loginPage = {loginPage}></Login></>}/> }
       <Route path='*' element = {<><NavBarFull></NavBarFull><NoPage></NoPage></>}></Route>
     </Routes>
+    <Analytics/>
+    </>
     
   )
 }
