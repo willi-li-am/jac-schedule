@@ -1,15 +1,17 @@
 import { useState, useRef } from "react"
-import arrow from "../assets/arrow-right-solid.png"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight, faUser, faStar, faPencil, faHashtag, faArrowUpRightFromSquare, faChalkboard, faFlask, faTag, faMinus, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faUser, faStar, faHashtag, faArrowUpRightFromSquare, faFlask, faTag, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from "react"
 import ColorPicker from "./colorPicker"
-import { BeatLoader, ClipLoader, MoonLoader } from "react-spinners"
+import { BeatLoader} from "react-spinners"
+import CourseInput from "./input"
 
 
 function CoursePick(prop: any) {
+
     const [showColor, setShowColor] :any = useState({})
     const [loading, setLoading]: any = useState(false)
+    const [itemsList, setItemsList] = useState(null)
 
     if(prop.lastPage !== "/create") {
         prop.setLastPage("/create")
@@ -33,18 +35,12 @@ function CoursePick(prop: any) {
     }
     const [viewCourse, setViewCourse]: any = useState({})
 
-    const emptyCustomCourse = {
-        code: "",
-        MS: "",
-        ME: "",
-        TS: "",
-        TE: "",
-        WS: "",
-        WE: "",
-        RS: "",
-        RE: "",
-        FS: "",
-        FE: ""
+    function itemsToList(courseList: string[]) {
+        let itemsListList: any = []
+        for (let i = 0; i < courseList.length; i++){
+            itemsListList.push({id: i, name: courseList[i]})
+        }
+        setItemsList(itemsListList)
     }
 
     function sectionMaker(input: number): string{
@@ -394,11 +390,6 @@ function CoursePick(prop: any) {
       }, []
     );
 
-    const handleFormChange = (event: any) => {
-        let data:string = event.target.value;
-        prop.inputCode.current.value = data;
-    }
-
     function compareTime(course: any) {
         let scheduleObj = prop.schedule
         for (const day in scheduleObj) {
@@ -678,6 +669,9 @@ function CoursePick(prop: any) {
                     setTimeout(() => setLoading(false), 200)
                     let json = await response.json()
                     prop.setCourseList(json)
+
+                    itemsToList(json)
+
                     return json
                 }
             }
@@ -692,10 +686,10 @@ function CoursePick(prop: any) {
     }
 
 
-    async function handleFormSubmit (event: any, courseList: any, school_id:string) {
+    async function handleFormSubmit (event: any, school_id:string, input: string) {
         setLoading(true)
         event.preventDefault()
-        let code = prop.inputCode.current.value.toUpperCase()
+        let code = input.toUpperCase()
         let courseInfoJson: any
         let response:any = prop.courseList
         if (prop.courseList === ""){
@@ -710,15 +704,13 @@ function CoursePick(prop: any) {
                 let courseInfoJson =  prop.courseInfoCache[code]
                 let courseInfoInput = [courseInfoJson, ...prop.courseInfo]
                 prop.setCourseInfo(courseInfoInput)
-
-                prop.inputCode.current.value = ""
                 setLoading(false)
             }
             else {
                 try{
                     //fetch again if courselist is empty
             
-                    response = await fetch("https://jacschedule-api.vercel.app/" + school_id + "/" + code)
+                    response = await fetch("https://jacschedule-api.vercel.app/course/" + school_id + "/" + code)
                     
                     if (response.status !== 200) response = false
                     for(let i = 0; i < 2; i++){
@@ -745,9 +737,8 @@ function CoursePick(prop: any) {
 
                             prop.setColorList(colors)
             
-                            prop.inputCode.current.value = ""
                             setLoading(false)
-                            return
+                            return true
                         }
                     }
                 }
@@ -769,7 +760,7 @@ function CoursePick(prop: any) {
 
 
     return (
-        <div>
+        <div className="fixed" style={{zIndex: "1000"}}>
         {loading? <div className="absolute" style={{width: "100vw", height: "100vh", marginTop: "-60px", zIndex: 50}}>
             <div className="absolute text-white font-title z-10"><div style={{width: "100vw", height: "100vh", fontSize: "5rem"}} className="flex items-center justify-center"><BeatLoader speedMultiplier={1} color="white" size={40}/></div></div>
             <div className="bg-darker absolute opacity-60" style={{width: "100%", height: "100%"}}></div>
@@ -777,12 +768,7 @@ function CoursePick(prop: any) {
         <div className="flex flex-col items-center bg-slate-700" style={{width: "30vw", padding: "10px"}}>
         <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{  fontSize: "15px"}} onClick={() => setViewCourseInput(!viewCourseInput)}>{viewCourseInput? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Course</div>
         {viewCourseInput? <>
-        <form className="flex flex-col justify-center items-center" >
-            <div className="flex flex-row">
-                <input className = "bg-dark text-white outline-none" ref = {prop.inputCode} style={{height: "35px", marginTop:"5px", textAlign: "center"}} onChange={event => handleFormChange(event)} placeholder="Input Course Code"></input>
-                <button type = "submit"onClick = {(event) => handleFormSubmit(event, prop.courseList, "JAC")} className = "outline-none flex justify-center items-center hover: cursor-pointer bg-nav font-navButton text-center text-white" style={{width: "35px", height: "35px",     marginTop:"5px"}}><FontAwesomeIcon style={{height: "20px", width: "20px", color: "#ffffff"}} icon={faArrowRight} /></button>
-            </div>
-        </form>
+        <div><CourseInput handleFormSubmit = {handleFormSubmit} itemsList = {itemsList}/></div>
         <form className="flex flex-col justify-center items-center" style={{marginTop: "10px"}}>
             <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{marginBottom: "10px", fontSize: "15px"}} onClick={() => setViewCustomCourse(!viewCustomCourse)}>{viewCustomCourse? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Custom Course</div>
             {viewCustomCourse? <div className="flex flex-col justify-center items-center" style={{height: "291px"}}>
@@ -820,7 +806,7 @@ function CoursePick(prop: any) {
             <button className="bg-nav font-title text-white" style={{height: "40px", width: "50px", marginTop: "15px", padding: "8px", marginBottom: "10px"}} type="submit" onClick={(event) => {handleCustomSubmit(event)}}>Add</button> </div>: <></>}
         </form></> : <></>}
         </div>
-        <div className = "bg-list flex flex-col overflow-y-scroll items-center" style={{width: "30vw", height: viewCourseInput? (viewCustomCourse? "calc(100vh - 476px)" : "calc(100vh - 185px)" ): "calc(100vh - 102.5px)"}}>
+        <div className = "bg-list flex flex-col overflow-y-scroll items-center fixed" style={{zIndex: -1, width: "30vw", height: viewCourseInput? (viewCustomCourse? "calc(100vh - 476px)" : "calc(100vh - 185px)" ): "calc(100vh - 102.5px)"}}>
             {prop.courseInfo === "" || prop.courseInfo.length === 0? <div className="bg-darker sticky top-0 text-white font-title pt-2 pl-3 pb-2" style={{width: "calc(30vw - 8px)", fontSize: "20px"}}>Course List <span className="font-navButton" style={{fontSize: "15px", marginLeft: "5px"}}>(input a course)</span></div> : <></>}
             {prop.courseInfo !== "" && prop.courseInfo.length !== 0? <div>{prop.courseInfo.map((value: any, index: number) => {
                 return(

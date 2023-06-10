@@ -1,8 +1,28 @@
-import { useState } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faBars } from "@fortawesome/free-solid-svg-icons"
+import { useState, useEffect, useRef } from "react"
+import ExportSchedule from "./export"
 
 function Schedule (props: any) {
 
     const [showMore, setShowMore] = useState(false)
+    const [showExport, setShowExport] = useState(false)
+
+    const moreRef: any = useRef()
+
+    useEffect(() => {
+        const clickAway =  (event:any) => {
+          if(showMore && !moreRef.current.contains(event.target)){
+            setShowMore(false)
+          }
+        }
+        document.addEventListener("mousedown", clickAway)
+    
+        return () => {
+          // Cleanup the event listener
+          document.removeEventListener("mousedown", clickAway)
+        }
+      }, [showMore])
 
     function timeToSchedule(schedule: any){
         let time = schedule.split("-")
@@ -86,7 +106,7 @@ function Schedule (props: any) {
     }
 
     return(
-        <div className="flex text-white" style={{marginTop: "10px"}}>
+        <div className="flex text-white" style={{marginTop: "10px", marginLeft: "30vw"}}>
             <div className = "bg-darker border-white flex flex-row"style={{width: "calc(70vw - 40px)", height: "calc(100vh - 150px)", marginLeft: "20px", marginRight: "20px", marginTop: ""}}>
                 <div className = "bg-dark" style={{minWidth:"60px", maxWidth: "60px", paddingRight: "10px", height: "calc(100vh - 150px)", borderColor: "grey", fontSize: "16px"}}>
                     <div className="flex flex-col justify-center" style={{marginTop: "32px", height: "calc(100vh - 198px)", fontSize: "16px"}}>
@@ -195,14 +215,17 @@ function Schedule (props: any) {
 
                 </div>
             </div>
-            <div onMouseLeave={() => setShowMore(false)} className="absolute" style = {{right: 0, bottom: 0, marginBottom: "70px", width: "150px", marginRight: "20px"}}>
-                <button className="bg-list text-white font-title p-4 rounded-md absolute" style={{width: "150px"}} onClick={() => setShowMore(!showMore)}>Show More</button>
-                {showMore? <div className="bg-list absolute" style={{height: "120px", marginTop: "-120px", width: "200px", marginLeft: "-50px"}}>
-                    <button className="hover:bg-navButton text-white font-title p-4" style={{width: "200px", height: "60px"}} onClick={props.clearCourse}>Export Course</button>
-                    <button className="hover:bg-navButton text-white font-title p-4" style={{width: "200px", height: "60px"}} onClick={props.clearCourse}>&times; Clear All</button>
+            <div ref = {moreRef} className="absolute" style = {{right: 0, bottom: 0, marginBottom: "70px", width: "60px", marginRight: "20px"}}>
+                <button className="bg-list text-white font-title absolute" style={{width: "60px",height: "60px" , padding: "15px", borderRadius: "10px"}} onClick={() => setShowMore(!showMore)}><FontAwesomeIcon style={{width: "30px", height: "30px"}} icon={faBars}/></button>
+                {showMore? <div className="bg-list relative border-2 border-white" style={{height: "120px", marginTop: "-120px", width: "200px", marginLeft: "-140px"}}>
+                    <button className="hover:bg-navButton text-white font-title p-4" style={{width: "196px", height: "58px"}} onClick={() => {setShowExport(true); setShowMore(false)}}>Export Course</button>
+                    <button className="hover:bg-navButton text-white font-title p-4" style={{width: "196px", height: "58px"}} onClick={() => {props.clearCourse(); setShowMore(false)}}>&times; Clear All</button>
                 </div> : <></>}
             </div>
-            
+            {showExport? <div className="bg-list" style={{position: "absolute"}}>
+                <div style={{position: "absolute", zIndex: 100000, width: "40vw", height: "60vh", marginTop:"20px"}}><ExportSchedule setShowExport = {setShowExport} courseInfo = {props.courseInfo} coursePicked = {props.coursePicked} courseIndexPicked = {props.courseIndexPicked} colorList = {props.colorList}></ExportSchedule></div>
+                <div className="bg-list" style={{position: "absolute", width: "100vw", height: "calc(100vh - 60px)", top: "-10px", left: "-30vw", zIndex: 1000, opacity: "70%"}}></div>
+            </div> : <></>}
         </div>
     )
 }

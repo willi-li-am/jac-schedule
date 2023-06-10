@@ -11,7 +11,7 @@ function NavBar(props: any) {
         return(
             <div className = "sticky top-0 w-full bg-nav flex items-center justify-between text-white pl-5 pr-5" style={{height: "60px"}}>
                 <div className='flex'>
-                    <Link to = "/" className="font-title text-xl hover: cursor-pointer">JAC Schedule Builder</Link>
+                    <Link to = "/" className="font-title text-xl hover: cursor-pointer">JAC schedule maker</Link>
                     <div>
                         <div onClick = {() => {setCreatePop(!createPop)}}className="flex justify-center items-center font-navButton text-lg ml-8 hover: cursor-pointer select-none">
                         {props.loggedIn? <div className="">Create</div> : <Link to = "/create">Create</Link>}
