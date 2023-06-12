@@ -656,12 +656,12 @@ function CoursePick(prop: any) {
         setLoading(true)
         let response: any
         try{
-            response = await fetch("https://jacschedule-api.vercel.app/course/search/" + school_id) 
+            response = await fetch("https://api.jacschedule.com/course/search/" + school_id) 
             if (response.status !== 200) response = false
             for(let i = 0; i < 2; i++){
                 if (response === false){
                     
-                        await fetch("https://jacschedule-api.vercel.app/course/search/" + school_id)
+                        await fetch("https://api.jacschedule.com/course/search/" + school_id)
                         .then((r) => r.status === 200? response = r : response = false)
 
                 }
@@ -710,13 +710,13 @@ function CoursePick(prop: any) {
                 try{
                     //fetch again if courselist is empty
             
-                    response = await fetch("https://jacschedule-api.vercel.app/course/" + school_id + "/" + code)
+                    response = await fetch("https://api.jacschedule.com/course/" + school_id + "/" + code)
                     
                     if (response.status !== 200) response = false
                     for(let i = 0; i < 2; i++){
                         if (response === false){
                             
-                             await fetch("https://jacschedule-api.vercel.app/course/" + school_id + "/" + code)
+                             await fetch("https://api.jacschedule.com/course/" + school_id + "/" + code)
                                 .then((r) => r.status === 200? response = r : response = false)
 
                         }
