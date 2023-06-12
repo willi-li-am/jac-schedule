@@ -13,6 +13,8 @@ function CoursePick(prop: any) {
     const [loading, setLoading]: any = useState(false)
     const [itemsList, setItemsList] = useState(null)
 
+    const inputCode: any = useRef("")
+
     if(prop.lastPage !== "/create") {
         prop.setLastPage("/create")
     }
@@ -738,6 +740,7 @@ function CoursePick(prop: any) {
                             prop.setColorList(colors)
             
                             setLoading(false)
+                            inputCode.current.value = ""
                             return true
                         }
                     }
@@ -768,7 +771,11 @@ function CoursePick(prop: any) {
         <div className="flex flex-col items-center bg-slate-700" style={{width: "30vw", padding: "10px"}}>
         <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{  fontSize: "15px"}} onClick={() => setViewCourseInput(!viewCourseInput)}>{viewCourseInput? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Course</div>
         {viewCourseInput? <>
-        <div><CourseInput handleFormSubmit = {handleFormSubmit} itemsList = {itemsList}/></div>
+        <form className="flex flex-row text-white">
+            <input ref = {inputCode} onChange={(event) => inputCode.current.value = event.target.value} className="bg-dark" style={{width: "170px", marginTop: "5px", height: "35px", textAlign: "center"}}></input>
+            
+            <button type = "submit" onClick = {(event) => {handleFormSubmit(event, "JAC", inputCode.current.value)}} className = "outline-none flex justify-center items-center hover: cursor-pointer bg-nav font-navButton text-center text-white" style={{width: "35px", height: "35px", marginTop:"5px"}}><FontAwesomeIcon style={{height: "20px", width: "20px", color: "#ffffff"}} icon={faArrowRight} /></button>
+        </form>
         <form className="flex flex-col justify-center items-center" style={{marginTop: "10px"}}>
             <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{marginBottom: "10px", fontSize: "15px"}} onClick={() => setViewCustomCourse(!viewCustomCourse)}>{viewCustomCourse? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Custom Course</div>
             {viewCustomCourse? <div className="flex flex-col justify-center items-center" style={{height: "291px"}}>
