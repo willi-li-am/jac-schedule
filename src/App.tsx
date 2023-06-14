@@ -13,10 +13,8 @@ import { Analytics } from '@vercel/analytics/react';
 import { isMobile, isTablet } from 'react-device-detect';
 import MobileHome from './components/mobileHomePage';
 import CreateMobile from './components/createUnavailable';
-import CourseInput from './components/input';
-import ReRender from './components/rerender';
-import Test from './components/test';
-import ExportSchedule from './components/export';
+import HomePageTop from './components/homePageTop';
+import Disclaimer from './components/disclaimer';
 
 function App() { //add routes to make current page stuff so if reload, still on schedule page
 
@@ -30,6 +28,7 @@ function App() { //add routes to make current page stuff so if reload, still on 
     "settings": 2,
     "login": 3
   }
+  const [showDisclaimer, setShowDisclaimer] = useState(true)
   //global
   const [update, setUpdate] = useState(false)
   const [lastPage, setLastPage] = useState("/")
@@ -155,6 +154,10 @@ function App() { //add routes to make current page stuff so if reload, still on 
     setUpdate(!update)
 }
 
+function addHoverCourse(course: any, code: any, index: number){
+
+}
+
 function removeCourse(course: any, code: any){
   let scheduleObj = schedule
   let coursePickedObj = courseIndexPicked
@@ -181,7 +184,7 @@ function handleColor(input:any, code: any):void {
   return(
     <>
     <Routes>
-      {isMobile && !isTablet?<Route path='/' element = {<><NavBarFull></NavBarFull><MobileHome lastPage = {lastPage} setLastPage = {setLastPage}></MobileHome></>}/> : <Route path='/' element = {<><NavBarFull></NavBarFull><HomePage lastPage = {lastPage} setLastPage = {setLastPage}></HomePage></>}/>}
+      {isMobile && !isTablet?<Route path='/' element = {<><NavBarFull></NavBarFull><MobileHome lastPage = {lastPage} setLastPage = {setLastPage}></MobileHome></>}/> : <Route path='/' element = {<div style={{ height: "100vh", overflowY: showDisclaimer? "hidden" : "auto"}}><Disclaimer setShowDisclaimer = {setShowDisclaimer} showDisclaimer = {showDisclaimer}/><HomePageTop/><NavBarFull></NavBarFull><HomePage lastPage = {lastPage} setLastPage = {setLastPage}></HomePage></div>}/>}
       {isMobile && !isTablet? <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull><CreateMobile/></div>}/> : <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull>
         <div className='flex'>
         <CoursePick handleColor = {handleColor} colorList = {colorList} setColorList = {setColorList} removeCourseCode = {removeCourseCode} courseInfoCache = {courseInfoCache} setCourseInfoCache = {setCourseInfoCache} lastPage = {lastPage} setLastPage = {setLastPage} removeCourse = {removeCourse} addCourse = {addCourse} courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked} setUpdate = {setUpdate} update = {update}></CoursePick><Schedule coursePicked = {coursePicked} courseInfo = {courseInfo} courseIndexPicked = {courseIndexPicked} clearCourse = {clearCourse} colorList = {colorList}></Schedule>
@@ -189,7 +192,6 @@ function handleColor(input:any, code: any):void {
         
       {loggedIn? <Route path='/settings' element = {<><NavBarFull></NavBarFull><Settings handleLogOut = {handleLogOut}></Settings></>}/> : <Route path='/settings' element = {<Navigate to = "/" replace></Navigate>}/>}
       {loggedIn? <Route path = "/login" element = {<Navigate to = "/" replace></Navigate>}></Route> : <Route path='/login' element = {<><NavBarFull></NavBarFull><Login lastPage = {lastPage} setLoggedIn = {setLoggedIn} loggedIn = {loggedIn} switchPage = {switchLoginPage} loginPage = {loginPage}></Login></>}/> }
-      <Route path='/test' element = {<><NavBarFull/><ExportSchedule></ExportSchedule></>}></Route>
       <Route path='*' element = {<><NavBarFull></NavBarFull><NoPage></NoPage></>}></Route>
     </Routes>
     <Analytics/>

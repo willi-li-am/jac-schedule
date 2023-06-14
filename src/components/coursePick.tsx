@@ -763,7 +763,7 @@ function CoursePick(prop: any) {
 
 
     return (
-        <div className="fixed" style={{zIndex: "1000"}}>
+        <div className="sticky" style={{zIndex: "1000"}}>
         {loading? <div className="absolute" style={{width: "100vw", height: "100vh", marginTop: "-60px", zIndex: 50}}>
             <div className="absolute text-white font-title z-10"><div style={{width: "100vw", height: "100vh", fontSize: "5rem"}} className="flex items-center justify-center"><BeatLoader speedMultiplier={1} color="white" size={40}/></div></div>
             <div className="bg-darker absolute opacity-60" style={{width: "100%", height: "100%"}}></div>
@@ -771,11 +771,9 @@ function CoursePick(prop: any) {
         <div className="flex flex-col items-center bg-slate-700" style={{width: "30vw", padding: "10px"}}>
         <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{  fontSize: "15px"}} onClick={() => setViewCourseInput(!viewCourseInput)}>{viewCourseInput? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Course</div>
         {viewCourseInput? <>
-        <form className="flex flex-row text-white">
-            <input ref = {inputCode} onChange={(event) => inputCode.current.value = event.target.value} className="bg-dark" style={{width: "170px", marginTop: "5px", height: "35px", textAlign: "center"}}></input>
-            
-            <button type = "submit" onClick = {(event) => {handleFormSubmit(event, "JAC", inputCode.current.value)}} className = "outline-none flex justify-center items-center hover: cursor-pointer bg-nav font-navButton text-center text-white" style={{width: "35px", height: "35px", marginTop:"5px"}}><FontAwesomeIcon style={{height: "20px", width: "20px", color: "#ffffff"}} icon={faArrowRight} /></button>
-        </form>
+
+            <CourseInput inputCode = {inputCode} handleFormSubmit = {handleFormSubmit}></CourseInput>
+       
         <form className="flex flex-col justify-center items-center" style={{marginTop: "10px"}}>
             <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{marginBottom: "10px", fontSize: "15px"}} onClick={() => setViewCustomCourse(!viewCustomCourse)}>{viewCustomCourse? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Custom Course</div>
             {viewCustomCourse? <div className="flex flex-col justify-center items-center" style={{height: "291px"}}>
@@ -813,7 +811,7 @@ function CoursePick(prop: any) {
             <button className="bg-nav font-title text-white" style={{height: "40px", width: "50px", marginTop: "15px", padding: "8px", marginBottom: "10px"}} type="submit" onClick={(event) => {handleCustomSubmit(event)}}>Add</button> </div>: <></>}
         </form></> : <></>}
         </div>
-        <div className = "bg-list flex flex-col overflow-y-scroll items-center fixed" style={{zIndex: -1, width: "30vw", height: viewCourseInput? (viewCustomCourse? "calc(100vh - 476px)" : "calc(100vh - 185px)" ): "calc(100vh - 102.5px)"}}>
+        <div className = "bg-list flex flex-col overflow-y-scroll items-center sticky" style={{zIndex: -1, width: "30vw", height: viewCourseInput? (viewCustomCourse? "calc(100vh - 476px)" : "calc(100vh - 185px)" ): "calc(100vh - 102.5px)"}}>
             {prop.courseInfo === "" || prop.courseInfo.length === 0? <div className="bg-darker sticky top-0 text-white font-title pt-2 pl-3 pb-2" style={{width: "calc(30vw - 8px)", fontSize: "20px"}}>Course List <span className="font-navButton" style={{fontSize: "15px", marginLeft: "5px"}}>(input a course)</span></div> : <></>}
             {prop.courseInfo !== "" && prop.courseInfo.length !== 0? <div>{prop.courseInfo.map((value: any, index: number) => {
                 return(

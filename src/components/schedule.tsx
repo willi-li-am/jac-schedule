@@ -106,7 +106,7 @@ function Schedule (props: any) {
     }
 
     return(
-        <div className="flex text-white" style={{marginTop: "10px", marginLeft: "30vw"}}>
+        <div className="flex text-white" style={{marginTop: "10px"}}>
             <div className = "bg-darker border-white flex flex-row"style={{width: "calc(70vw - 40px)", height: "calc(100vh - 150px)", marginLeft: "20px", marginRight: "20px", marginTop: ""}}>
                 <div className = "bg-dark" style={{minWidth:"60px", maxWidth: "60px", paddingRight: "10px", height: "calc(100vh - 150px)", borderColor: "grey", fontSize: "16px"}}>
                     <div className="flex flex-col justify-center" style={{marginTop: "32px", height: "calc(100vh - 198px)", fontSize: "16px"}}>

@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import { Outlet, Link } from "react-router-dom";
+import { isMobile, isTablet } from 'react-device-detect';
 
 function NavBar(props: any) {
 
@@ -9,11 +10,11 @@ function NavBar(props: any) {
 
     function Bar(props: any) {
         return(
-            <div className = "sticky top-0 w-full bg-nav flex items-center justify-between text-white pl-5 pr-5" style={{height: "60px"}}>
+            <div className = "sticky top-0 w-full bg-nav flex items-center justify-between text-white pl-5 pr-5" style={{height: "60px", zIndex: "1"}}>
                 <div className='flex'>
-                    <Link to = "/" className="font-title text-xl hover: cursor-pointer">JAC schedule maker</Link>
+                    <Link to = "/" className="font-title hover: cursor-pointer" style = {{fontSize: (isMobile && !isTablet)? "1rem" : "24px"}}>JAC schedule maker</Link>
                     <div>
-                        <div onClick = {() => {setCreatePop(!createPop)}}className="flex justify-center items-center font-navButton text-lg ml-8 hover: cursor-pointer select-none">
+                        <div onClick = {() => {setCreatePop(!createPop)}}className="flex justify-center items-center font-navButton ml-8 hover: cursor-pointer select-none" style={{fontSize: (isMobile && !isTablet)? ".75rem" : "20px", marginTop: "4px"}}>
                         {props.loggedIn? <div className="">Create</div> : <Link to = "/create">Create</Link>}
                         {props.loggedIn? <>{createPop? <FontAwesomeIcon icon={faChevronDown} style={{color: "#ffffff", marginLeft: "5px", marginTop: "0px"}} /> : <FontAwesomeIcon icon={faChevronUp} style={{color: "#ffffff", marginLeft: "5px", marginTop: "0px"}} />}</> : <></>}
                         </div>
