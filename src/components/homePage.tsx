@@ -1,7 +1,6 @@
 import { useState } from "react"
 import ColorPicker from "./colorPicker"
 import { ClipLoader } from "react-spinners"
-import { ReactSearchAutocomplete } from "react-search-autocomplete"
 
 function HomePage(props: any) {
 

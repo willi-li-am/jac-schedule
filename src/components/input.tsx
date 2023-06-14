@@ -1,8 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
-import { useEffect, useState } from "react"
-import { ReactSearchAutocomplete } from "react-search-autocomplete"
-import { useRef } from "react"
 
 function CourseInput(props: any){
 
