@@ -2,7 +2,6 @@ import { useState } from "react"
 import Signup from "./signup"
 import LoginPage from "./loginPage"
 import { useNavigate } from "react-router-dom"
-import { useEffect } from "react"
 
 function Login(props: any) { //Make it that it doesnt return you to homepage
 

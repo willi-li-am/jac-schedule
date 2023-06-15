@@ -50,9 +50,14 @@ function Schedule (props: any) {
                 let margin = format[1]
                 
                 courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 0 - 1px)", marginTop: margin,  borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
-                    <div style={{marginLeft: "8px", fontSize: "0.9rem", marginTop: "5px"}}>{props.courseCode === "COMPLEMENTARY"? props.course["courseCode"] : props.courseCode}</div>
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.5rem"}}>{props.course["title"]}</div> : <></>}
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.9rem"}}>{props.course["section"]}</div> : <></>}
+                     <div className="flex justify-center font-title text-center p-1">
+                        {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
+                        {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
+                    </div>
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["teacher"]}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{(props.courseCode === "COMPLEMENTARY")? props.course["courseCode"] : props.courseCode}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
+                    
                 </div>)
             }
             else if (day !== "" && day === "T") {
@@ -61,9 +66,13 @@ function Schedule (props: any) {
                 let margin = format[1]
                 
                 courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 1)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
-                    <div style={{marginLeft: "8px", fontSize: "0.9rem", marginTop: "5px"}}>{props.courseCode === "COMPLEMENTARY"? props.course["courseCode"] : props.courseCode}</div>
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.5rem"}}>{props.course["title"]}</div> : <></>}
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.9rem"}}>{props.course["section"]}</div> : <></>}
+                   <div className="flex justify-center font-title text-center p-1">
+                        {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
+                        {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
+                    </div>
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["teacher"]}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{(props.courseCode === "COMPLEMENTARY")? props.course["courseCode"] : props.courseCode}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
                 </div>)
             }
             else if (day !== "" && day === "W") {
@@ -72,9 +81,13 @@ function Schedule (props: any) {
                 let margin = format[1]
                 
                 courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%", backgroundColor: props.color, height: height, marginLeft: "calc(20% * 2)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
-                    <div style={{marginLeft: "8px", fontSize: "0.9rem", marginTop: "5px"}}>{props.courseCode === "COMPLEMENTARY"? props.course["courseCode"] : props.courseCode}</div>
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.5rem"}}>{props.course["title"]}</div> : <></>}
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.9rem"}}>{props.course["section"]}</div> : <></>}
+                    <div className="flex justify-center font-title text-center p-1">
+                        {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
+                        {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
+                    </div>
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["teacher"]}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{(props.courseCode === "COMPLEMENTARY")? props.course["courseCode"] : props.courseCode}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
                 </div>)
             }
             else if (day !== "" && day === "R") {
@@ -83,9 +96,13 @@ function Schedule (props: any) {
                 let margin = format[1]
                 
                 courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 3)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
-                    <div style={{marginLeft: "8px", fontSize: "0.9rem", marginTop: "5px"}}>{props.courseCode === "COMPLEMENTARY"? props.course["courseCode"] : props.courseCode}</div>
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.5rem"}}>{props.course["title"]}</div> : <></>}
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.9rem"}}>{props.course["section"]}</div> : <></>}
+                    <div className="flex justify-center font-title text-center p-1">
+                        {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
+                        {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
+                    </div>
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["teacher"]}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{(props.courseCode === "COMPLEMENTARY")? props.course["courseCode"] : props.courseCode}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
                 </div>)
             }
             else if (day !== "" && day === "F") {
@@ -94,9 +111,13 @@ function Schedule (props: any) {
                 let margin = format[1]
                 
                 courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 4)", marginTop: margin, borderLeftWidth: '1px', borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
-                    <div style={{marginLeft: "8px", fontSize: "0.9rem", marginTop: "5px"}}>{props.courseCode === "COMPLEMENTARY"? props.course["courseCode"] : props.courseCode}</div>
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.5rem"}}>{props.course["title"]}</div> : <></>}
-                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.9rem"}}>{props.course["section"]}</div> : <></>}
+                    <div className="flex justify-center font-title text-center p-1">
+                        {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
+                        {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
+                    </div>
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["teacher"]}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{(props.courseCode === "COMPLEMENTARY")? props.course["courseCode"] : props.courseCode}</div> : <></>}
+                    {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
                 </div>)
             }
         }

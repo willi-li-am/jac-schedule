@@ -1,7 +1,3 @@
-import { useState } from "react"
-import ColorPicker from "./colorPicker"
-import { ClipLoader } from "react-spinners"
-
 function HomePage(props: any) {
 
     if(props.lastPage !== "/") {
@@ -25,7 +21,7 @@ function HomePage(props: any) {
             <div className="text-white mt-20 mb-20">
                 <div className="font-title">Current Schedule Information:</div>
                 <div className="flex flex-row">
-                    <div className="border-2 p-2 border-r-0 flex justify-center" style={{width: "200px"}}>John Abbott College:</div><div className="border-2 p-2 flex justify-center" style={{width: "200px"}}>Fall 2023 (May 18th)</div>
+                    <div className="border-2 p-2 border-r-0 flex justify-center" style={{width: "200px"}}>John Abbott College:</div><div className="border-2 p-2 flex justify-center" style={{width: "200px"}}>Fall 2023 (June 15th)</div>
                 </div>
                 <div className="flex flex-row">
                     <div className="border-2 p-2 border-r-0 border-t-0 flex justify-center" style={{width: "200px"}}>Dawson College:</div><div className="border-2 border-t-0 p-2 flex justify-center" style={{width: "200px"}}>Coming Soon</div>

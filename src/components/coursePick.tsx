@@ -373,7 +373,7 @@ function CoursePick(prop: any) {
     } 
     
     useEffect(() => {
-        getClassList("JAC")
+        if(prop.courseList === "") getClassList("JAC")
     }, [])
 
     useEffect(() => {
@@ -472,7 +472,7 @@ function CoursePick(prop: any) {
                 <div className=" font-title flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.colorm}} icon={faUser} /><div className="" style={{fontSize: "13px"}}>{props.value["teacher"]}</div></div>
                 <div className=" flex items-center space-x-2" style={{fontSize: "12px"}}><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faTag} /><div>{props.value["title"]}</div></div>
                 <div className=" flex items-center space-x-2" style={{fontSize: "12px"}}><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faHashtag} /> <div>{props.value["section"]}</div></div>
-                {props.value["rating"] == "DNE"? <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /> <div>Rating Not Available</div></div> : 
+                {props.value["rating"] == "DNE"? <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
                 <div>
                 <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /><div style={{fontSize: "13px"}}>{props.value["rating"]["rating"]} ({props.value["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["rating"]["link"]}><FontAwesomeIcon title = "link to ratemyprofessor" style={{height: "13px", width: "13px"}} className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
                 </div>} 
@@ -482,7 +482,7 @@ function CoursePick(prop: any) {
                     <div className=" font-title">Lab Teacher:</div>
                     <div className="flex flex-col space-y-1 pl-4 mt-2">
                         <div className="font-title flex items-center space-x-2"><FontAwesomeIcon title = "lab teacher" style={{height: "15px", width: "15px", color: props.color}} icon={faFlask} /> <div className="">{props.value["lab"]["teacher"]}</div></div>
-                        {props.value["lab"]["rating"] == "DNE"? <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /> <div>Rating Not Available</div></div> : 
+                        {props.value["lab"]["rating"] == "DNE"? <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
                         <div>
                         <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /><div>{props.value["lab"]["rating"]["rating"]} ({props.value["lab"]["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["lab"]["rating"]["link"]}><FontAwesomeIcon style={{height: "15px", width: "15px"}}  className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
                         </div>} 

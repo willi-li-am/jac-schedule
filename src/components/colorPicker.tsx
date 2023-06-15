@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { ChromePicker, CirclePicker, CompactPicker, HuePicker, SketchPicker } from 'react-color';
-import { useState } from 'react';
 
 
 
