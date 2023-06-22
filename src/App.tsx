@@ -18,7 +18,54 @@ import Disclaimer from './components/disclaimer';
 
 function App() { //add routes to make current page stuff so if reload, still on schedule page
 
-  
+    class trieNode {
+        childrenList: string[]
+        children: { [key: string]: trieNode }
+        
+        constructor(){
+            this.childrenList = []
+            this.children = {}
+        
+        }
+        }
+        
+    class trieTree {
+        root: trieNode
+        
+        constructor(){
+            this.root = new trieNode()
+        }
+        
+        insert(word: string) {
+            let node = this.root
+        
+            for (let i = 0; i < word.length; i++){
+                if (!(word[i] in node.children)){
+                    node.children[word[i]] = new trieNode()
+                }
+                node = node.children[word[i]];
+                if (!(node.childrenList.includes(word))){
+                    node.childrenList.push(word)
+                }
+            }
+        }
+        
+        suggest(input: string) {
+            let node = this.root
+        
+            for (let i = 0; i < input.length; i++){
+                if (!(input[i] in node.children)){
+                    return null
+                }
+                node = node.children[input[i]]
+                if (i === input.length - 1){
+                    return node.childrenList
+                }
+            }
+        }
+    }
+
+    const autoComplete: any = useRef(new trieTree())
 
   const navigate = useNavigate()
 
@@ -38,7 +85,7 @@ function App() { //add routes to make current page stuff so if reload, still on 
   //coursePick
   const [courseList, setCourseList] = useState("")
   const inputCode = useRef(null)
-  const [courseInfo, setCourseInfo]:any = useState("")
+  const [courseInfo, setCourseInfo]:any = useState("") //change to hashmap
   const [courseInfoCache, setCourseInfoCache]: any = useState({})
   const [coursePicked, setCoursePicked]:any = useState([])
   const [schedule, setSchedule]: any = useState({
@@ -47,8 +94,8 @@ function App() { //add routes to make current page stuff so if reload, still on 
     W: [],
     R: [],
     F: []
-  })
-  const [courseIndexPicked, setCourseIndexPicked]: any = useState({})
+  }) //dont save the schedule (do it on frontend)
+  const [courseIndexPicked, setCourseIndexPicked]: any = useState({}) //use the section instead of index (makes it easier)
 
   const [colorList, setColorList]:any = useState({})
 
@@ -187,7 +234,7 @@ function handleColor(input:any, code: any):void {
       {isMobile && !isTablet?<Route path='/' element = {<><NavBarFull></NavBarFull><MobileHome lastPage = {lastPage} setLastPage = {setLastPage}></MobileHome></>}/> : <Route path='/' element = {<div style={{ height: "100vh", overflowY: showDisclaimer? "hidden" : "auto"}}><Disclaimer setShowDisclaimer = {setShowDisclaimer} showDisclaimer = {showDisclaimer}/><HomePageTop/><NavBarFull></NavBarFull><HomePage lastPage = {lastPage} setLastPage = {setLastPage}></HomePage></div>}/>}
       {isMobile && !isTablet? <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull><CreateMobile/></div>}/> : <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull>
         <div className='flex'>
-        <CoursePick handleColor = {handleColor} colorList = {colorList} setColorList = {setColorList} removeCourseCode = {removeCourseCode} courseInfoCache = {courseInfoCache} setCourseInfoCache = {setCourseInfoCache} lastPage = {lastPage} setLastPage = {setLastPage} removeCourse = {removeCourse} addCourse = {addCourse} courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked} setUpdate = {setUpdate} update = {update}></CoursePick><Schedule coursePicked = {coursePicked} courseInfo = {courseInfo} courseIndexPicked = {courseIndexPicked} clearCourse = {clearCourse} colorList = {colorList}></Schedule>
+        <CoursePick autoComplete = {autoComplete} handleColor = {handleColor} colorList = {colorList} setColorList = {setColorList} removeCourseCode = {removeCourseCode} courseInfoCache = {courseInfoCache} setCourseInfoCache = {setCourseInfoCache} lastPage = {lastPage} setLastPage = {setLastPage} removeCourse = {removeCourse} addCourse = {addCourse} courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked} setUpdate = {setUpdate} update = {update}></CoursePick><Schedule coursePicked = {coursePicked} courseInfo = {courseInfo} courseIndexPicked = {courseIndexPicked} clearCourse = {clearCourse} colorList = {colorList}></Schedule>
         </div></div>}/>}
         
       {loggedIn? <Route path='/settings' element = {<><NavBarFull></NavBarFull><Settings handleLogOut = {handleLogOut}></Settings></>}/> : <Route path='/settings' element = {<Navigate to = "/" replace></Navigate>}/>}

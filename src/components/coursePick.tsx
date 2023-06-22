@@ -9,6 +9,7 @@ import CourseInput from "./input"
 
 function CoursePick(prop: any) {
 
+
     const [showColor, setShowColor] :any = useState({})
     const [loading, setLoading]: any = useState(false)
     const [itemsList, setItemsList] = useState(null)
@@ -41,6 +42,7 @@ function CoursePick(prop: any) {
         let itemsListList: any = []
         for (let i = 0; i < courseList.length; i++){
             itemsListList.push({id: i, name: courseList[i]})
+            prop.autoComplete.current.insert(courseList[i])
         }
         setItemsList(itemsListList)
     }
@@ -772,7 +774,7 @@ function CoursePick(prop: any) {
         <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{  fontSize: "15px"}} onClick={() => setViewCourseInput(!viewCourseInput)}>{viewCourseInput? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Course</div>
         {viewCourseInput? <>
 
-            <CourseInput inputCode = {inputCode} handleFormSubmit = {handleFormSubmit}></CourseInput>
+            <CourseInput coursePicked = {prop.coursePicked} autoComplete = {prop.autoComplete} inputCode = {inputCode} handleFormSubmit = {handleFormSubmit}></CourseInput>
        
         <form className="flex flex-col justify-center items-center" style={{marginTop: "10px"}}>
             <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{marginBottom: "10px", fontSize: "15px"}} onClick={() => setViewCustomCourse(!viewCustomCourse)}>{viewCustomCourse? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Custom Course</div>

@@ -20,19 +20,20 @@ function NavBar(props: any) {
                         </div>
                         {props.loggedIn? <>{createPop? <div className='absolute bg-dark flex flex-col items-center justify-end' style={{ width: "200px", marginTop: "19px"}}>
                             <Link style={{height: "60px", width: "200px", padding: "10px", marginBottom: "3px"}} className='bg-nav flex justify-center items-center hover:bg-slate-700 duration-200' to = "/create">Create New Schedule</Link>
-{/*Change Link Here*/}                            <div style={{height: "60px",  width: "200px", padding: "10px"}} className='bg-nav flex justify-center items-center hover:cursor-pointer hover:bg-slate-700 duration-200' >Saved Schedules</div>   
+{/*Change Link Here*/}      <div style={{height: "60px",  width: "200px", padding: "10px"}} className='bg-nav flex justify-center items-center hover:cursor-pointer hover:bg-slate-700 duration-200' >Saved Schedules</div>   
                         </div> : <></>} </>: <></>} 
                     </div>
                 </div>
-                {props.word == "Log In"? <Link to = "/login" className="bg-navButton mr-0 border-2 border-none h-8 rounded-xl w-24 flex justify-center items-center text-white hover: cursor-pointer bg-selected">
+                
+            </div>
+        )
+    }
+    /*{props.word == "Log In"? <Link to = "/login" className="bg-navButton mr-0 border-2 border-none h-8 rounded-xl w-24 flex justify-center items-center text-white hover: cursor-pointer bg-selected">
                     <div>{props.word}</div>
                 </Link> :
                 <Link to = "/settings" className="bg-navButton mr-0 border-2 border-none h-8 rounded-xl w-24 flex justify-center items-center text-white hover: cursor-pointer bg-selected">
                 <div>{props.word}</div>
-            </Link>}
-            </div>
-        )
-    }
+            </Link>}*/
     
     if (!props.loggedIn) {
         return( //placeholder arrow, change to different one when internet is on
