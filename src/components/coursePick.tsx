@@ -99,6 +99,9 @@ function CoursePick(prop: any) {
                 else if(newInput === ":" && !(oldInput.includes(":")) && (oldInput.length >= 1)){
                     customCourse[dict[input]].current.value = textInput
                 }
+                else{
+                    customCourse[dict[input]].current.value = oldInput
+                }
             }
             else if ((textInput.length === 5) && textInput.includes(":")){
                 if (textInput === ""){
@@ -110,6 +113,12 @@ function CoursePick(prop: any) {
                 else if(newInput === ":" && !(oldInput.includes(":")) && (oldInput.length >= 1)){
                     customCourse[dict[input]].current.value = textInput
                 }
+                else{
+                    customCourse[dict[input]].current.value = oldInput
+                }
+            }
+            else{
+                customCourse[dict[input]].current.value = oldInput
             }
         }
         else {
