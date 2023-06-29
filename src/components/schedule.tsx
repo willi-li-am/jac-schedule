@@ -2,13 +2,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect, useRef } from "react"
 import ExportSchedule from "./export"
+import CoursePick from "./coursePick"
 
 function Schedule (props: any) {
 
+    const [hoverCourse, setHoverCourse]: any = useState("hi")
     const [showMore, setShowMore] = useState(false)
     const [showExport, setShowExport] = useState(false)
 
     const moreRef: any = useRef()
+
+    useEffect(()=> {
+        console.log("Hi")
+    },[props.hoverCourse.current])
 
     useEffect(() => {
         const clickAway =  (event:any) => {
@@ -49,7 +55,7 @@ function Schedule (props: any) {
                 let height = format[0]
                 let margin = format[1]
                 
-                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 0 - 1px)", marginTop: margin,  borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
+                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 0 - 1px)", marginTop: margin,  borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white", opacity: props.course["type"] == "hover"? "60%" : "100%"}}>
                      <div className="flex justify-center font-title text-center p-1">
                         {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
                         {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
@@ -65,7 +71,7 @@ function Schedule (props: any) {
                 let height = format[0]
                 let margin = format[1]
                 
-                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 1)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
+                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 1)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white", opacity: props.course["type"] === "hover"? "60%" : "100%"}}>
                    <div className="flex justify-center font-title text-center p-1">
                         {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
                         {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
@@ -80,7 +86,7 @@ function Schedule (props: any) {
                 let height = format[0]
                 let margin = format[1]
                 
-                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%", backgroundColor: props.color, height: height, marginLeft: "calc(20% * 2)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
+                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%", backgroundColor: props.color, height: height, marginLeft: "calc(20% * 2)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white", opacity: props.course["type"] === "hover"? "60%" : "100%"}}>
                     <div className="flex justify-center font-title text-center p-1">
                         {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
                         {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
@@ -95,7 +101,7 @@ function Schedule (props: any) {
                 let height = format[0]
                 let margin = format[1]
                 
-                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 3)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
+                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 3)", marginTop: margin, borderWidth: "1px", borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white", opacity: props.course["type"] == "hover"? "60%" : "100%"}}>
                     <div className="flex justify-center font-title text-center p-1">
                         {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
                         {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
@@ -110,7 +116,7 @@ function Schedule (props: any) {
                 let height = format[0]
                 let margin = format[1]
                 
-                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 4)", marginTop: margin, borderLeftWidth: '1px', borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white"}}>
+                courseScheduleList.push(<div className="bg-list absolute" style={{width: "20%",backgroundColor: props.color, height: height, marginLeft: "calc(20% * 4)", marginTop: margin, borderLeftWidth: '1px', borderBottomWidth: "2px",borderTopWidth: "2px", borderColor: "white", opacity: props.course["type"] == "hover"? "60%" : "100%"}}>
                     <div className="flex justify-center font-title text-center p-1">
                         {props.course["type"] !== "custom"? <div style={{ fontSize: "10%"}}>{props.course["title"]}</div> : <></>}
                         {props.course["type"] === "custom"? <div style={{ fontSize: "10%"}}>{props.courseCode}</div> : <></>}
@@ -158,10 +164,15 @@ function Schedule (props: any) {
                                     if(code in props.courseIndexPicked){
                                         let courseIndex = props.courseIndexPicked[code]
                                         let course = props.courseInfo[index][courseIndex]
+                                        course["type"] = "course"
                                         let color = props.colorList[code].background
                                         return (<ToSchedule courseCode = {code} course = {course} color = {color}></ToSchedule>)
                                     }
                                     })}</div> : <></>}
+                        </div>
+                        <div className="absolute" style={{marginLeft: "", width: "calc(70vw - 108px)", height: "calc(100vh - 198px)"}}>
+                            {"code" in props.hoverCourse.current && "course" in props.hoverCourse.current? 
+                            <ToSchedule courseCode = {props.hoverCourse.current["code"]} course = {props.hoverCourse.current["course"]} color = {props.colorList[props.hoverCourse.current["code"]].background}></ToSchedule> : <></>}
                         </div>
                         <div className="flex flex-row" style={{height: "100%", width: '100%'}}>
                             <div className="flex flex-col" style={{height: "100%", width: '20%', borderRightWidth: "1px", borderColor: "white"}}>

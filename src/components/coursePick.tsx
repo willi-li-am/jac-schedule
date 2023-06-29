@@ -5,9 +5,12 @@ import { useEffect } from "react"
 import ColorPicker from "./colorPicker"
 import { BeatLoader} from "react-spinners"
 import CourseInput from "./input"
+import Schedule from "./schedule"
+import React from "react"
+import { isPropertySignature } from "typescript"
 
 
-function CoursePick(prop: any) {
+const CoursePick = React.memo((prop: any) => {
 
 
     const [showColor, setShowColor] :any = useState({})
@@ -474,66 +477,66 @@ function CoursePick(prop: any) {
         return(
             <div className= "flex flex-col" key = {props.value["teacher"] + " " + props.value["title"] + " " + props.value["section"]} style={{color: props.color, fontSize: "15px"}}>
                 {props.comp? 
-                <div className="flex flex-col">
-                    <div className="font-title flex items-center space-x-2"><div className="" style={{fontSize: "13px"}}>{props.value["courseCode"]}</div></div>
-                    <div className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Domain: {props.value["domain"]}</div></div>
-                    <div className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Ensemble: {props.value["ensemble"]}</div></div>
+                <div key = {props.value["title"] + props.value["section"] + "complementary"} className="flex flex-col">
+                    <div key = {props.value["courseCode"] + "codeNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2"><div className="" style={{fontSize: "13px"}}>{props.value["courseCode"]}</div></div>
+                    <div key = {props.value["courseCode"] + "domainNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Domain: {props.value["domain"]}</div></div>
+                    <div key = {props.value["courseCode"] + "ensembleNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Ensemble: {props.value["ensemble"]}</div></div>
                 </div>
                 : <></>}
-                <div className=" font-title flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.colorm}} icon={faUser} /><div className="" style={{fontSize: "13px"}}>{props.value["teacher"]}</div></div>
-                <div className=" flex items-center space-x-2" style={{fontSize: "12px"}}><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faTag} /><div>{props.value["title"]}</div></div>
-                <div className=" flex items-center space-x-2" style={{fontSize: "12px"}}><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faHashtag} /> <div>{props.value["section"]}</div></div>
-                {props.value["rating"] == "DNE"? <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
+                <div key = {props.value["teacher"] + "teacherLine" + props.value["courseCode"] + props.value["section"]} className=" font-title flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.colorm}} icon={faUser} /><div className="" style={{fontSize: "13px"}}>{props.value["teacher"]}</div></div>
+                <div key = {props.value["teacher"] + "titleLine" + props.value["courseCode"] + props.value["section"]} className=" flex items-center space-x-2" style={{fontSize: "12px"}}><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faTag} /><div>{props.value["title"]}</div></div>
+                <div key = {props.value["teacher"] + "sectionLine" + props.value["courseCode"] + props.value["section"]} className=" flex items-center space-x-2" style={{fontSize: "12px"}}><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faHashtag} /> <div>{props.value["section"]}</div></div>
+                {props.value["rating"] == "DNE"? <div key = {props.value["teacher"] + "ratingLine" + props.value["courseCode"] + props.value["section"]} className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
                 <div>
-                <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /><div style={{fontSize: "13px"}}>{props.value["rating"]["rating"]} ({props.value["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["rating"]["link"]}><FontAwesomeIcon title = "link to ratemyprofessor" style={{height: "13px", width: "13px"}} className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
+                <div key = {props.value["teacher"] + "ratingLine" + props.value["courseCode"] + props.value["section"]} className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /><div style={{fontSize: "13px"}}>{props.value["rating"]["rating"]} ({props.value["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["rating"]["link"]}><FontAwesomeIcon title = "link to ratemyprofessor" style={{height: "13px", width: "13px"}} className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
                 </div>} 
                 {!("lab" in props.value)||!("teacher" in props.value["lab"]) ? <></> : <>
                     {props.value["lab"]["teacher"] === props.value["teacher"]? <></>:
                     <>
-                    <div className=" font-title">Lab Teacher:</div>
-                    <div className="flex flex-col space-y-1 pl-4 mt-2">
-                        <div className="font-title flex items-center space-x-2"><FontAwesomeIcon title = "lab teacher" style={{height: "15px", width: "15px", color: props.color}} icon={faFlask} /> <div className="">{props.value["lab"]["teacher"]}</div></div>
-                        {props.value["lab"]["rating"] == "DNE"? <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
+                    <div key = {props.value["lab"]["teacher"] + "labTeacherLineIntro" + props.value["courseCode"] + props.value["section"]} className=" font-title">Lab Teacher:</div>
+                    <div key = {props.value["lab"]["teacher"] + "tgt lab thing" + props.value["courseCode"] + props.value["section"]}  className="flex flex-col space-y-1 pl-4 mt-2">
+                        <div key = {props.value["lab"]["teacher"] + "labTeacherLine" + props.value["courseCode"] + props.value["section"]}  className="font-title flex items-center space-x-2"><FontAwesomeIcon title = "lab teacher" style={{height: "15px", width: "15px", color: props.color}} icon={faFlask} /> <div className="">{props.value["lab"]["teacher"]}</div></div>
+                        {props.value["lab"]["rating"] == "DNE"? <div key = {props.value["lab"]["teacher"] + "labRatingLine" + props.value["courseCode"] + props.value["section"]}  className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
                         <div>
-                        <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /><div>{props.value["lab"]["rating"]["rating"]} ({props.value["lab"]["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["lab"]["rating"]["link"]}><FontAwesomeIcon style={{height: "15px", width: "15px"}}  className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
+                        <div key = {props.value["lab"]["teacher"] + "labRatingLine" + props.value["courseCode"] + props.value["section"]}  className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /><div>{props.value["lab"]["rating"]["rating"]} ({props.value["lab"]["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["lab"]["rating"]["link"]}><FontAwesomeIcon style={{height: "15px", width: "15px"}}  className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
                         </div>} 
                     </div>
                     </>
                 }</>
                 }
-                 <div className="flex flex-col text-imp">
-                    {props.value["details"]["fee"] !== ""? <div style={{fontSize: "12px"}}>Fees: {props.value["details"]["fee"]}$</div> : <></>}
-                    {props.value["details"]["restrict"] !== ""? <div style={{fontSize: "12px"}}>Not for {props.value["details"]["restrict"]} students</div> : <></>}
-                    {props.value["details"]["exclusive"] !== ""? <div style={{fontSize: "12px"}}>For {props.value["details"]["exclusive"]} students only</div> : <></>}
-                    {props.value["details"]["blended"] !== ""? <div style={{fontSize: "12px"}}>Blended Learning</div> : <></>}
-                    {props.value["details"]["intensive"] !== ""? <div style={{fontSize: "12px"}}>{props.value["details"]["intensive"]}</div> : <></>}
+                 <div key = {props.value["teacher"] + "details group" + props.value["courseCode"] + props.value["section"]} className="flex flex-col text-imp">
+                    {props.value["details"]["fee"] !== ""? <div key = {props.value["teacher"] + "fee" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Fees: {props.value["details"]["fee"]}$</div> : <></>}
+                    {props.value["details"]["restrict"] !== ""? <div key = {props.value["teacher"] + "restrict" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Not for {props.value["details"]["restrict"]} students</div> : <></>}
+                    {props.value["details"]["exclusive"] !== ""? <div  key = {props.value["teacher"] + "exclusive" + props.value["courseCode"] + props.value["section"]}style={{fontSize: "12px"}}>For {props.value["details"]["exclusive"]} students only</div> : <></>}
+                    {props.value["details"]["blended"] !== ""? <div key = {props.value["teacher"] + "blended" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Blended Learning</div> : <></>}
+                    {props.value["details"]["intensive"] !== ""? <div key = {props.value["teacher"] + "intensive" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>{props.value["details"]["intensive"]}</div> : <></>}
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col" key = {props.value["teacher"] + "schedule group" + props.value["courseCode"] + props.value["section"]}>
                     <div className="flex flex-col ml-2" style={{fontSize: "10px"}}>
                         {props.value["schedule"]["M"] !== ""? 
-                        <div className="flex flex-row justify-between items-center" style={{width: "82px"}}>
-                            <div>Mon</div>
-                            <div>{props.value["schedule"]["M"]}</div>
+                        <div key = {props.value["teacher"] + "MondayGroup" + props.value["courseCode"] + props.value["section"]} className="flex flex-row justify-between items-center" style={{width: "82px"}}>
+                            <div key = {props.value["teacher"] + "Monday" + props.value["courseCode"] + props.value["section"]} >Mon</div>
+                            <div key = {props.value["teacher"] + "MondaySchedule" + props.value["courseCode"] + props.value["section"]}>{props.value["schedule"]["M"]}</div>
                         </div> : <></>}
                         {props.value["schedule"]["T"] !== ""? 
-                        <div className="flex flex-row justify-between items-center" style={{width: "82px"}}>
-                            <div>Tue</div>
-                            <div>{props.value["schedule"]["T"]}</div>
+                        <div key = {props.value["teacher"] + "TueGroup" + props.value["courseCode"] + props.value["section"]} className="flex flex-row justify-between items-center" style={{width: "82px"}}>
+                            <div key = {props.value["teacher"] + "Tue" + props.value["courseCode"] + props.value["section"]}>Tue</div>
+                            <div key = {props.value["teacher"] + "TueLine" + props.value["courseCode"] + props.value["section"]}>{props.value["schedule"]["T"]}</div>
                         </div> : <></>}
                         {props.value["schedule"]["W"] !== ""? 
-                        <div className="flex flex-row justify-between items-center" style={{width: "82px"}}>
-                            <div>Wed</div>
-                            <div>{props.value["schedule"]["W"]}</div>
+                        <div key = {props.value["teacher"] + "WedGroup" + props.value["courseCode"] + props.value["section"]} className="flex flex-row justify-between items-center" style={{width: "82px"}}>
+                            <div key = {props.value["teacher"] + "Wed" + props.value["courseCode"] + props.value["section"]}>Wed</div>
+                            <div key = {props.value["teacher"] + "WedLine" + props.value["courseCode"] + props.value["section"]}>{props.value["schedule"]["W"]}</div>
                         </div> : <></>}
                         {props.value["schedule"]["R"] !== ""? 
-                        <div className="flex flex-row justify-between items-center" style={{width: "82px"}}>
-                            <div>Thu</div>
-                            <div>{props.value["schedule"]["R"]}</div>
+                        <div key = {props.value["teacher"] + "ThuGroup" + props.value["courseCode"] + props.value["section"]} className="flex flex-row justify-between items-center" style={{width: "82px"}}>
+                            <div key = {props.value["teacher"] + "Thu" + props.value["courseCode"] + props.value["section"]}>Thu</div>
+                            <div key = {props.value["teacher"] + "ThuLine" + props.value["courseCode"] + props.value["section"]}>{props.value["schedule"]["R"]}</div>
                         </div> : <></>}
                         {props.value["schedule"]["F"] !== ""? 
-                        <div className="flex flex-row justify-between items-center" style={{width: "82px"}}>
-                            <div>Fri</div>
-                            <div>{props.value["schedule"]["F"]}</div>
+                        <div key = {props.value["teacher"] + "FriGroup" + props.value["courseCode"] + props.value["section"]} className="flex flex-row justify-between items-center" style={{width: "82px"}}>
+                            <div key = {props.value["teacher"] + "Fri" + props.value["courseCode"] + props.value["section"]}>Fri</div>
+                            <div key = {props.value["teacher"] + "FriLine" + props.value["courseCode"] + props.value["section"]}>{props.value["schedule"]["F"]}</div>
                         </div> : <></>}
                     </div>
                 </div>
@@ -577,8 +580,9 @@ function CoursePick(prop: any) {
 
                     if (index === prop.courseIndexPicked[courseCode] && props.listIndex === (prop.courseInfo).length-1) {
                         return(
-                            <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
-                                <CourseInfo  comp = {true} value = {value} color = "#58c75b"></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div>
+                            <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                                <CourseInfo  comp = {true} value = {value} color = "#58c75b"></CourseInfo>
+                                <div key = {value["courseCode"] + value["section"] + "button"} onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div>
                             </div>
                         )
                     }
@@ -586,29 +590,31 @@ function CoursePick(prop: any) {
                     if (index === 0 || index === prop.courseIndexPicked[courseCode]){
 
                         return(
-                            <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                            <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                                  {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {true} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {true} value = {value}></CourseInfo>
-                            <div onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
+                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])}  onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
                             </div>
                         )
                     }
                     else if (index === (prop.courseInfo[props.listIndex].length - 1) && index === (props.listIndex)) {
                         
                         return(
-                            <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                            <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                                 {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {true} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {true} value = {value}></CourseInfo>
-                            <div onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
+                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])}  onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
                             </div>
                         )
                     }
 
                     return(
-                        <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                        <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                              {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {true} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {true} value = {value}></CourseInfo>
-                            <div onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
+                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])} onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}>
+                                <div key = {value["courseCode"] + value["section"] + "buttonPlus"} style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div>
+                                <div key = {value["courseCode"] + value["section"] + "buttonPlus1"} style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
                         </div>
                     )
                     })}</> : <></>}
@@ -629,35 +635,41 @@ function CoursePick(prop: any) {
 
                 if (index === prop.courseIndexPicked[courseCode] && props.listIndex === (prop.courseInfo).length-1) {
                     return(
-                    <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
-                        <CourseInfo  comp = {false} value = {value} color = "#58c75b"></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div>
+                    <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                        <CourseInfo  comp = {false} value = {value} color = "#58c75b"></CourseInfo>
+                        <div key = {value["courseCode"] + value["section"] + "button"} onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}>
+                        <div key = {value["courseCode"] + value["section"] + "buttonBackground"} style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div>
                     </div>
                     ) 
                 }
 
                 if (index === 0 || index === prop.courseIndexPicked[courseCode]){
                     return(
-                        <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                        <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                              {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {false} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {false} value = {value}></CourseInfo>
-                            <div onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {false} value = {value}></CourseInfo>}</>}
+                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])} onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div>
+                            <div key = {value["courseCode"] + value["section"] + "buttonBackground"} style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {false} value = {value}></CourseInfo>}</>}
                         </div>
                     )
                 }
                 else if (index === (prop.courseInfo[props.listIndex].length - 1) && props.listIndex === (prop.courseInfo).length-1) {
                     return(
-                        <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                        <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                             {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {false} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {false} value = {value}></CourseInfo>
-                        <div onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {false} value = {value}></CourseInfo>}</>}
+                        <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])} onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {false} value = {value}></CourseInfo>}</>}
                         </div>
                     )
                 }
                 return(
-                    <div className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
+                    <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                             {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {false} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {false} value = {value}></CourseInfo>
-                                <div onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88"  comp = {false} value = {value}></CourseInfo>}</>}
+                                <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> {prop.addHoverCourse(value, prop.coursePicked[props.listIndex]); console.log("hi")}} onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}>
+                                
+                                <div key = {value["courseCode"] + value["section"] + "buttonPlus"} style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div>
+                                <div key = {value["courseCode"] + value["section"] + "buttonPlus1"} style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88"  comp = {false} value = {value}></CourseInfo>}</>}
                     </div>
                 )
             })}</> : <></>}
@@ -774,6 +786,7 @@ function CoursePick(prop: any) {
 
 
     return (
+        <div className="flex flex-row">
         <div className="sticky" style={{zIndex: "1000"}}>
         {loading? <div className="absolute" style={{width: "100vw", height: "100vh", marginTop: "-60px", zIndex: 50}}>
             <div className="absolute text-white font-title z-10"><div style={{width: "100vw", height: "100vh", fontSize: "5rem"}} className="flex items-center justify-center"><BeatLoader speedMultiplier={1} color="white" size={40}/></div></div>
@@ -781,13 +794,13 @@ function CoursePick(prop: any) {
         </div> : <></>}
         <div className="flex flex-col items-center bg-slate-700" style={{width: "30vw", padding: "10px"}}>
         <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{  fontSize: "15px"}} onClick={() => setViewCourseInput(!viewCourseInput)}>{viewCourseInput? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Course</div>
-        {viewCourseInput? <>
+        <div className="flex items-center flex-col" style = {{display: viewCourseInput? "flex": "none"}}>
 
             <CourseInput coursePicked = {prop.coursePicked} autoComplete = {prop.autoComplete} inputCode = {inputCode} handleFormSubmit = {handleFormSubmit}></CourseInput>
        
         <form className="flex flex-col justify-center items-center" style={{marginTop: "10px"}}>
             <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{marginBottom: "10px", fontSize: "15px"}} onClick={() => setViewCustomCourse(!viewCustomCourse)}>{viewCustomCourse? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Custom Course</div>
-            {viewCustomCourse? <div className="flex flex-col justify-center items-center" style={{height: "291px"}}>
+            <div className="flex flex-col justify-center items-center" style={{height: "291px", display: viewCustomCourse? "flex":"none"}}>
             <input ref={customCourse["code"]} onChange = {(event) => {handleCustomInput(event, 0)}} className = "bg-dark text-white outline-none" style={{height: "30px", textAlign: "center", width: "143px", padding: "10px"}} placeholder="Course Code"></input>
             <div className="text-white flex items-center space-x-1 mr-11" style={{marginTop: "15px"}}>
                 <div style={{width: "40px"}}>Mon</div>
@@ -819,8 +832,8 @@ function CoursePick(prop: any) {
                 <div className="font-title">-</div>
                 <input ref={customCourse["FE"]} onChange = {(event) => {handleCustomInput(event, 10)}} className = "bg-dark text-white outline-none " style={{height: "30px", textAlign: "center", width: "65px", fontSize:"11px", padding: "5px"}}  placeholder="End Time"></input>
             </div>
-            <button className="bg-nav font-title text-white" style={{height: "40px", width: "50px", marginTop: "15px", padding: "8px", marginBottom: "10px"}} type="submit" onClick={(event) => {handleCustomSubmit(event)}}>Add</button> </div>: <></>}
-        </form></> : <></>}
+            <button className="bg-nav font-title text-white" style={{height: "40px", width: "50px", marginTop: "15px", padding: "8px", marginBottom: "10px"}} type="submit" onClick={(event) => {handleCustomSubmit(event)}}>Add</button> </div>
+        </form></div>
         </div>
         <div className = "bg-list flex flex-col overflow-y-scroll items-center sticky" style={{zIndex: -1, width: "30vw", height: viewCourseInput? (viewCustomCourse? "calc(100vh - 476px)" : "calc(100vh - 185px)" ): "calc(100vh - 102.5px)"}}>
             {prop.courseInfo === "" || prop.courseInfo.length === 0? <div className="bg-darker sticky top-0 text-white font-title pt-2 pl-3 pb-2" style={{width: "calc(30vw - 8px)", fontSize: "20px"}}>Course List <span className="font-navButton" style={{fontSize: "15px", marginLeft: "5px"}}>(input a course)</span></div> : <></>}
@@ -831,7 +844,9 @@ function CoursePick(prop: any) {
             })}</div> : <></>}
         </div>
         </div>
+        <Schedule hoverCourse = {prop.hoverCourse} clearCourse= {prop.clearCourse} addHoverCourse = {prop.addHoverCourse} removeHoverCourse = {prop.removeHoverCourse} autoComplete = {prop.autoComplete} handleColor = {prop.handleColor} colorList = {prop.colorList} setColorList = {prop.setColorList} removeCourseCode = {prop.removeCourseCode} courseInfoCache = {prop.courseInfoCache} setCourseInfoCache = {prop.setCourseInfoCache} lastPage = {prop.lastPage} setLastPage = {prop.setLastPage} removeCourse = {prop.removeCourse} addCourse = {prop.addCourse} courseIndexPicked = {prop.courseIndexPicked} setCourseIndexPicked = {prop.setCourseIndexPicked} schedule = {prop.schedule} setSchedule = {prop.setSchedule} courseList = {prop.courseList} setCourseList = {prop.setCourseList} inputCode = {inputCode} courseInfo = {prop.courseInfo} setCourseInfo = {prop.setCourseInfo} coursePicked = {prop.coursePicked} setCoursePicked = {prop.setCoursePicked} setUpdate = {setUpdate} update = {update}/>
+        </div>
     )
-}
+})
 
 export default CoursePick

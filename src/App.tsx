@@ -15,6 +15,8 @@ import MobileHome from './components/mobileHomePage';
 import CreateMobile from './components/createUnavailable';
 import HomePageTop from './components/homePageTop';
 import Disclaimer from './components/disclaimer';
+import { hover } from '@testing-library/user-event/dist/hover';
+
 
 function App() { //add routes to make current page stuff so if reload, still on schedule page
 
@@ -78,6 +80,7 @@ function App() { //add routes to make current page stuff so if reload, still on 
   const [showDisclaimer, setShowDisclaimer] = useState(true)
   //global
   const [update, setUpdate] = useState(false)
+  const [updateSchedule, setUpdateSchedule] = useState(false)
   const [lastPage, setLastPage] = useState("/")
   //login
   const [loggedIn, setLoggedIn] = useState(false)
@@ -98,6 +101,8 @@ function App() { //add routes to make current page stuff so if reload, still on 
   const [courseIndexPicked, setCourseIndexPicked]: any = useState({}) //use the section instead of index (makes it easier)
 
   const [colorList, setColorList]:any = useState({})
+
+  const hoverCourse: any = useRef({})
 
   function removeCourseCode(code:string) {
     let index = coursePicked.indexOf(code)
@@ -127,6 +132,8 @@ function App() { //add routes to make current page stuff so if reload, still on 
     let courseInfoVar = courseInfo
     courseInfoVar.splice(index, 1)
     setCourseInfo(courseInfoVar)
+
+    hoverCourse.current = {}
 
     setUpdate(!update)
   }
@@ -184,9 +191,11 @@ function App() { //add routes to make current page stuff so if reload, still on 
     }
     setCourseIndexPicked({})
     setSchedule(scheduleObj)
+    hoverCourse.current = {}
   }
 
   function addCourse(course: any, code: any, index: number) {
+    hoverCourse.current = {}
     let scheduleObj = schedule
     let coursePickedObj = courseIndexPicked
 
@@ -195,15 +204,28 @@ function App() { //add routes to make current page stuff so if reload, still on 
     }
 
     coursePickedObj[code] = index
-
+    
     setSchedule(scheduleObj)
     setCourseIndexPicked(coursePickedObj)
     setUpdate(!update)
 }
 
-function addHoverCourse(course: any, code: any, index: number){
-
+function addHoverCourse(course: any, code: any){
+    let hover = hoverCourse.current
+    hover["code"] = code
+    hover["course"] = course
+    hover["course"]["type"] = "hover"
+    hoverCourse.current = hover
+    setUpdateSchedule(!updateSchedule)
 }
+
+function removeHoverCourse() {
+    let hover = {}
+
+    hoverCourse.current = hover
+    setUpdateSchedule(!updateSchedule)
+}
+
 
 function removeCourse(course: any, code: any){
   let scheduleObj = schedule
@@ -214,7 +236,7 @@ function removeCourse(course: any, code: any){
   }
 
   delete coursePickedObj[code]
-
+  hoverCourse.current = {}
   setSchedule(scheduleObj)
   setCourseIndexPicked(coursePickedObj)
   setUpdate(!update)
@@ -234,7 +256,7 @@ function handleColor(input:any, code: any):void {
       {isMobile && !isTablet?<Route path='/' element = {<><NavBarFull></NavBarFull><MobileHome lastPage = {lastPage} setLastPage = {setLastPage}></MobileHome></>}/> : <Route path='/' element = {<div style={{ height: "100vh", overflowY: showDisclaimer? "hidden" : "auto"}}><Disclaimer setShowDisclaimer = {setShowDisclaimer} showDisclaimer = {showDisclaimer}/><HomePageTop/><NavBarFull></NavBarFull><HomePage lastPage = {lastPage} setLastPage = {setLastPage}></HomePage></div>}/>}
       {isMobile && !isTablet? <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull><CreateMobile/></div>}/> : <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull>
         <div className='flex'>
-        <CoursePick autoComplete = {autoComplete} handleColor = {handleColor} colorList = {colorList} setColorList = {setColorList} removeCourseCode = {removeCourseCode} courseInfoCache = {courseInfoCache} setCourseInfoCache = {setCourseInfoCache} lastPage = {lastPage} setLastPage = {setLastPage} removeCourse = {removeCourse} addCourse = {addCourse} courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked} setUpdate = {setUpdate} update = {update}></CoursePick><Schedule coursePicked = {coursePicked} courseInfo = {courseInfo} courseIndexPicked = {courseIndexPicked} clearCourse = {clearCourse} colorList = {colorList}></Schedule>
+        <CoursePick hoverCourse = {hoverCourse} clearCourse= {clearCourse} addHoverCourse = {addHoverCourse} removeHoverCourse = {removeHoverCourse} autoComplete = {autoComplete} handleColor = {handleColor} colorList = {colorList} setColorList = {setColorList} removeCourseCode = {removeCourseCode} courseInfoCache = {courseInfoCache} setCourseInfoCache = {setCourseInfoCache} lastPage = {lastPage} setLastPage = {setLastPage} removeCourse = {removeCourse} addCourse = {addCourse} courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked} setUpdate = {setUpdate} update = {update}></CoursePick>
         </div></div>}/>}
         
       {loggedIn? <Route path='/settings' element = {<><NavBarFull></NavBarFull><Settings handleLogOut = {handleLogOut}></Settings></>}/> : <Route path='/settings' element = {<Navigate to = "/" replace></Navigate>}/>}
