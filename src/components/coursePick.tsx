@@ -8,6 +8,7 @@ import CourseInput from "./input"
 import Schedule from "./schedule"
 import React from "react"
 import { isPropertySignature } from "typescript"
+import SchoolPick from "./schoolPick"
 
 
 const CoursePick = React.memo((prop: any) => {
@@ -381,14 +382,11 @@ const CoursePick = React.memo((prop: any) => {
         customCourse["RE"].current.value = ""
         customCourse["FS"].current.value = ""
         customCourse["FE"].current.value = ""
+
         prop.setUpdate(!prop.update)
 
         return courseObj
     } 
-    
-    useEffect(() => {
-        if(prop.courseList === "") getClassList("JAC")
-    }, [])
 
     useEffect(() => {
         const handleTabClose = (event: any) => {
@@ -439,7 +437,7 @@ const CoursePick = React.memo((prop: any) => {
     }
 
     function CourseInfo(props: any) { //value property
-        if (props.value["type"] === "custom"){
+        if (props.value["type"] === "custom" || (!("details" in props.value))){
             return (<div className= "flex flex-col" key = {props.value["title"] + " " + props.value["section"]} style={{color: props.color, fontSize: "15px"}}>
                 <div className=" font-title flex items-center space-x-2"><FontAwesomeIcon title = "course title" style={{height: "13px", width: "13px", color: props.color}} icon = {faTag}></FontAwesomeIcon><div  style={{fontSize: "13px"}}>{props.value["title"]}</div></div>
                 <div className=" flex items-center space-x-2"><FontAwesomeIcon title = "section" style={{height: "13px", width: "13px", color: props.color}} icon={faHashtag} /> <div style={{fontSize: "13px"}}>{props.value["section"]}</div></div>
@@ -479,8 +477,8 @@ const CoursePick = React.memo((prop: any) => {
                 {props.comp? 
                 <div key = {props.value["title"] + props.value["section"] + "complementary"} className="flex flex-col">
                     <div key = {props.value["courseCode"] + "codeNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2"><div className="" style={{fontSize: "13px"}}>{props.value["courseCode"]}</div></div>
-                    <div key = {props.value["courseCode"] + "domainNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Domain: {props.value["domain"]}</div></div>
-                    <div key = {props.value["courseCode"] + "ensembleNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Ensemble: {props.value["ensemble"]}</div></div>
+                    {"domain" in props.value? <div key = {props.value["courseCode"] + "domainNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Domain: {props.value["domain"]}</div></div> : <></>}
+                    {"ensemble" in props.value? <div key = {props.value["courseCode"] + "ensembleNameComplementary" + props.value["section"]} className="font-title flex items-center space-x-2" style={{fontSize: "12px"}}><div className="">Ensemble: {props.value["ensemble"]}</div></div>: <></>}
                 </div>
                 : <></>}
                 <div key = {props.value["teacher"] + "teacherLine" + props.value["courseCode"] + props.value["section"]} className=" font-title flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.colorm}} icon={faUser} /><div className="" style={{fontSize: "13px"}}>{props.value["teacher"]}</div></div>
@@ -493,23 +491,29 @@ const CoursePick = React.memo((prop: any) => {
                 {!("lab" in props.value)||!("teacher" in props.value["lab"]) ? <></> : <>
                     {props.value["lab"]["teacher"] === props.value["teacher"]? <></>:
                     <>
-                    <div key = {props.value["lab"]["teacher"] + "labTeacherLineIntro" + props.value["courseCode"] + props.value["section"]} className=" font-title">Lab Teacher:</div>
-                    <div key = {props.value["lab"]["teacher"] + "tgt lab thing" + props.value["courseCode"] + props.value["section"]}  className="flex flex-col space-y-1 pl-4 mt-2">
-                        <div key = {props.value["lab"]["teacher"] + "labTeacherLine" + props.value["courseCode"] + props.value["section"]}  className="font-title flex items-center space-x-2"><FontAwesomeIcon title = "lab teacher" style={{height: "15px", width: "15px", color: props.color}} icon={faFlask} /> <div className="">{props.value["lab"]["teacher"]}</div></div>
-                        {props.value["lab"]["rating"] == "DNE"? <div key = {props.value["lab"]["teacher"] + "labRatingLine" + props.value["courseCode"] + props.value["section"]}  className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
+                    <div key = {props.value["lab"]["teacher"] + "labTeacherLineIntro" + props.value["courseCode"] + props.value["section"]} className=" font-title" style={{fontSize: "13px"}}>Lab Teacher:</div>
+                    <div key = {props.value["lab"]["teacher"] + "tgt lab thing" + props.value["courseCode"] + props.value["section"]}  className="flex flex-col pl-4">
+                        <div key = {props.value["lab"]["teacher"] + "labTeacherLine" + props.value["courseCode"] + props.value["section"]}  className="font-title flex items-center space-x-2"><FontAwesomeIcon title = "lab teacher" style={{height: "13px", width: "13px", color: props.color}} icon={faFlask} /> <div className=""style={{fontSize: "13px"}}>{props.value["lab"]["teacher"]}</div></div>
+                        {props.value["lab"]["rating"] == "DNE"? <div key = {props.value["lab"]["teacher"] + "labRatingLine" + props.value["courseCode"] + props.value["section"]}  className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /> <div style={{fontSize: "12px"}}>Rating Not Available</div></div> : 
                         <div>
-                        <div key = {props.value["lab"]["teacher"] + "labRatingLine" + props.value["courseCode"] + props.value["section"]}  className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "15px", width: "15px", color: props.color}} icon={faStar} /><div>{props.value["lab"]["rating"]["rating"]} ({props.value["lab"]["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["lab"]["rating"]["link"]}><FontAwesomeIcon style={{height: "15px", width: "15px"}}  className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
+                        <div key = {props.value["lab"]["teacher"] + "labRatingLine" + props.value["courseCode"] + props.value["section"]}  className=" flex items-center space-x-2"><FontAwesomeIcon title = "rating" style={{height: "13px", width: "13px", color: props.color}} icon={faStar} /><div style={{fontSize: "13px"}}>{props.value["lab"]["rating"]["rating"]} ({props.value["lab"]["rating"]["reviews"]} reviews)</div><a className = "underline"target = "_blank" href = {props.value["lab"]["rating"]["link"]}><FontAwesomeIcon style={{height: "13px", width: "13px"}}  className="hover:text-link duration-150" icon={faArrowUpRightFromSquare} /></a></div>
                         </div>} 
                     </div>
                     </>
                 }</>
                 }
-                 <div key = {props.value["teacher"] + "details group" + props.value["courseCode"] + props.value["section"]} className="flex flex-col text-imp">
-                    {props.value["details"]["fee"] !== ""? <div key = {props.value["teacher"] + "fee" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Fees: {props.value["details"]["fee"]}$</div> : <></>}
-                    {props.value["details"]["restrict"] !== ""? <div key = {props.value["teacher"] + "restrict" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Not for {props.value["details"]["restrict"]} students</div> : <></>}
-                    {props.value["details"]["exclusive"] !== ""? <div  key = {props.value["teacher"] + "exclusive" + props.value["courseCode"] + props.value["section"]}style={{fontSize: "12px"}}>For {props.value["details"]["exclusive"]} students only</div> : <></>}
-                    {props.value["details"]["blended"] !== ""? <div key = {props.value["teacher"] + "blended" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Blended Learning</div> : <></>}
-                    {props.value["details"]["intensive"] !== ""? <div key = {props.value["teacher"] + "intensive" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>{props.value["details"]["intensive"]}</div> : <></>}
+                 <div key = {props.value["teacher"] + "details group" + props.value["courseCode"] + props.value["section"]} className="flex flex-col text-imp space-y-1">
+                    {"details" in props.value && props.value["details"]["fee"] !== ""? <div key = {props.value["teacher"] + "fee" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Fees: {props.value["details"]["fee"]}$</div> : <></>}
+                    {"details" in props.value && props.value["details"]["restrict"] !== ""? <div key = {props.value["teacher"] + "restrict" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Not for {props.value["details"]["restrict"]} students</div> : <></>}
+                    {"details" in props.value && props.value["details"]["exclusive"] !== ""? <div  key = {props.value["teacher"] + "exclusive" + props.value["courseCode"] + props.value["section"]}style={{fontSize: "12px"}}>For {props.value["details"]["exclusive"]} students only</div> : <></>}
+                    {"details" in props.value && props.value["details"]["blended"] !== ""? <div key = {props.value["teacher"] + "blended" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>Blended Learning</div> : <></>}
+                    {"details" in props.value && props.value["details"]["intensive"] !== ""? <div key = {props.value["teacher"] + "intensive" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}>{props.value["details"]["intensive"] === "Dawson Intensive"? 
+                        <>This section requires you to understand the policies and procedures for <a className = "text-link"
+						href="https://timetable.dawsoncollege.qc.ca/intensive-compressed-and-outdoor-education-courses/" target="_blank">Intensive / Compressed and Outdoor
+						Education Courses</a></>
+                        : props.value["details"]["intensive"]
+                    }</div> : <></>}
+                    {"details" in props.value && props.value["details"]["comment"] !== ""? <div key = {props.value["teacher"] + "comment" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}><span className = "text-white font-title">Comment:</span> {props.value["details"]["comment"]}</div> : <></>}
                 </div>
                 <div className="flex flex-col" key = {props.value["teacher"] + "schedule group" + props.value["courseCode"] + props.value["section"]}>
                     <div className="flex flex-col ml-2" style={{fontSize: "10px"}}>
@@ -581,8 +585,8 @@ const CoursePick = React.memo((prop: any) => {
                     if (index === prop.courseIndexPicked[courseCode] && props.listIndex === (prop.courseInfo).length-1) {
                         return(
                             <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
-                                <CourseInfo  comp = {true} value = {value} color = "#58c75b"></CourseInfo>
-                                <div key = {value["courseCode"] + value["section"] + "button"} onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div>
+                                <CourseInfo comp = {true} value = {value} color = "#58c75b"></CourseInfo>
+                                <div key = {value["courseCode"] + value["section"] + "button"} onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div key = {value["courseCode"] + value["section"] + "course" + index + "horizontal"} style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div>
                             </div>
                         )
                     }
@@ -591,9 +595,12 @@ const CoursePick = React.memo((prop: any) => {
 
                         return(
                             <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
-                                 {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {true} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
+                                 {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {true} value = {value}></CourseInfo><div key = {value["courseCode"] + value["section"] + "course" + index + "minusButton"} onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div key = {value["courseCode"] + value["section"] + "course" + index + "horizontal"} style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {true} value = {value}></CourseInfo>
-                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])}  onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
+                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])}  onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}>
+                                <div key = {value["courseCode"] + value["section"] + "course" + index + "plusButtonHorizontal"} style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div>
+                                <div key = {value["courseCode"] + value["section"] + "course" + index + "plusButtonVertical"} style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div>
+                            </div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
                             </div>
                         )
                     }
@@ -603,7 +610,9 @@ const CoursePick = React.memo((prop: any) => {
                             <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 border-b-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                                 {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {true} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {true} value = {value}></CourseInfo>
-                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])}  onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div><div style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
+                            <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> prop.addHoverCourse(value, prop.coursePicked[props.listIndex])}  onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}>
+                                <div key = {value["courseCode"] + value["section"] + "course" + index + "horizontalButtonPlus"} style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div>
+                                <div key = {value["courseCode"] + value["section"] + "course" + index + "verticalButtonPlus"} style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88" comp = {true} value = {value}></CourseInfo>}</>}
                             </div>
                         )
                     }
@@ -666,7 +675,7 @@ const CoursePick = React.memo((prop: any) => {
                     <div key = {value["courseCode"] + value["section"] + "course"} className= {"p-2 pl-4 pr-8 overflow-hidden border-darker border-t-8 flex flex-row items-center justify-between"} style={{width: "calc(30vw - 8px)"}}>
                             {(courseCode in prop.courseIndexPicked)?  <>{index === prop.courseIndexPicked[courseCode]? <><CourseInfo color = "#58c75b" comp = {false} value = {value}></CourseInfo><div onClick={() => prop.removeCourse(value, courseCode)} className="hover:cursor-pointer flex items-center justify-center" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}><div style={{backgroundColor: "white", width: "25px", height: "4px", borderRadius: "5px"}}></div></div></> : <></>}</>
                             :  <>{(compareTime(value))? <><CourseInfo  comp = {false} value = {value}></CourseInfo>
-                                <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> {prop.addHoverCourse(value, prop.coursePicked[props.listIndex]); console.log("hi")}} onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}>
+                                <div key = {value["courseCode"] + value["section"] + "button"} onMouseLeave={prop.removeHoverCourse} onMouseEnter={()=> {prop.addHoverCourse(value, prop.coursePicked[props.listIndex])}} onClick={() => prop.addCourse(value, prop.coursePicked[props.listIndex], index)} className="hover:cursor-pointer grid" style={{height: "40px", width: "40px", color: "#ffffff", backgroundColor: "#2C343E", borderRadius:"5px"}}>
                                 
                                 <div key = {value["courseCode"] + value["section"] + "buttonPlus"} style={{width: "25px", height: "4px", backgroundColor: "white", marginLeft: "7.5px", marginTop: "18px", borderRadius: "5px"}}></div>
                                 <div key = {value["courseCode"] + value["section"] + "buttonPlus1"} style={{width: "4px", height: "25px", backgroundColor: "white", marginLeft: "18px", marginTop: "-22px", borderRadius: "5px"}}></div></div></> : <CourseInfo color = "#ED8A88"  comp = {false} value = {value}></CourseInfo>}</>}
@@ -784,9 +793,16 @@ const CoursePick = React.memo((prop: any) => {
         }
     }
 
+    function pickSchool(schoolid: string){
+        prop.setSchool(schoolid)
+
+        getClassList(schoolid)
+    }
+
 
     return (
         <div className="flex flex-row">
+        {prop.school === ""? <SchoolPick pickSchool = {pickSchool} setSchool = {prop.setSchool}></SchoolPick> : <></>}
         <div className="sticky" style={{zIndex: "1000"}}>
         {loading? <div className="absolute" style={{width: "100vw", height: "100vh", marginTop: "-60px", zIndex: 50}}>
             <div className="absolute text-white font-title z-10"><div style={{width: "100vw", height: "100vh", fontSize: "5rem"}} className="flex items-center justify-center"><BeatLoader speedMultiplier={1} color="white" size={40}/></div></div>
@@ -796,7 +812,7 @@ const CoursePick = React.memo((prop: any) => {
         <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{  fontSize: "15px"}} onClick={() => setViewCourseInput(!viewCourseInput)}>{viewCourseInput? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Course</div>
         <div className="flex items-center flex-col" style = {{display: viewCourseInput? "flex": "none"}}>
 
-            <CourseInput coursePicked = {prop.coursePicked} autoComplete = {prop.autoComplete} inputCode = {inputCode} handleFormSubmit = {handleFormSubmit}></CourseInput>
+            <CourseInput school = {prop.school} coursePicked = {prop.coursePicked} autoComplete = {prop.autoComplete} inputCode = {inputCode} handleFormSubmit = {handleFormSubmit}></CourseInput>
        
         <form className="flex flex-col justify-center items-center" style={{marginTop: "10px"}}>
             <div className="flex items-center font-title text-white select-none hover:cursor-pointer" style={{marginBottom: "10px", fontSize: "15px"}} onClick={() => setViewCustomCourse(!viewCustomCourse)}>{viewCustomCourse? <FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}} icon={faChevronDown}></FontAwesomeIcon>:<FontAwesomeIcon style={{height: "15px", width: "15px", color: "#ffffff", marginRight: "5px"}}  icon={faChevronUp}></FontAwesomeIcon>}Add Custom Course</div>
@@ -839,7 +855,7 @@ const CoursePick = React.memo((prop: any) => {
             {prop.courseInfo === "" || prop.courseInfo.length === 0? <div className="bg-darker sticky top-0 text-white font-title pt-2 pl-3 pb-2" style={{width: "calc(30vw - 8px)", fontSize: "20px"}}>Course List <span className="font-navButton" style={{fontSize: "15px", marginLeft: "5px"}}>(input a course)</span></div> : <></>}
             {prop.courseInfo !== "" && prop.courseInfo.length !== 0? <div>{prop.courseInfo.map((value: any, index: number) => {
                 return(
-                    <div className="text-white"><CourseList listIndex = {index}></CourseList></div>
+                    <div key = {"CourseWrap" + index} className="text-white"><CourseList listIndex = {index}></CourseList></div>
                 )
             })}</div> : <></>}
         </div>

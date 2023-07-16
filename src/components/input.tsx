@@ -42,7 +42,7 @@ function CourseInput(props: any){
   <button
     type="submit"
     onClick={(event) => {
-      props.handleFormSubmit(event, "JAC", props.inputCode.current.value);
+      props.handleFormSubmit(event, props.school, props.inputCode.current.value);
     }}
     className="outline-none flex justify-center items-center hover: cursor-pointer bg-nav font-navButton text-center text-white"
     style={{ width: "35px", height: "35px", marginTop: "5px" }}
@@ -62,7 +62,7 @@ function CourseInput(props: any){
               className="hover:cursor-pointer hover:bg-darker"
               onClick={(event) => {
                 if (! (props.coursePicked.includes(value))) {
-                    props.handleFormSubmit(event, "JAC", value)
+                    props.handleFormSubmit(event, props.school, value)
                     props.inputCode.current.value = "";
                 };
               }}

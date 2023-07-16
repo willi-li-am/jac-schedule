@@ -12,7 +12,7 @@ function ExportSchedule (props: any) {
                 let color = props.colorList[code].background
                 
                 return(
-                    <div className="border-2 border-white p-2 text-white mr-0" style = {{height: "100px", width: "130px", backgroundColor: color}}>{code === "COMPLEMENTARY" ? course["courseCode"] : code}<br/>"{course["section"]}"</div>
+                    <div className="border-2 border-white p-2 text-white mr-0" style = {{height: "100px", width: "130px", backgroundColor: color}}>{code === "COMPLEMENTARY" ? course["courseCode"] : code}<br/>'{course["section"]}</div>
                 )
             }
         })}</> : <></>}

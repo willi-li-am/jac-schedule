@@ -101,6 +101,7 @@ function App() { //add routes to make current page stuff so if reload, still on 
   const [courseIndexPicked, setCourseIndexPicked]: any = useState({}) //use the section instead of index (makes it easier)
 
   const [colorList, setColorList]:any = useState({})
+  const [school, setSchool] = useState("")
 
   const hoverCourse: any = useRef({})
 
@@ -256,7 +257,7 @@ function handleColor(input:any, code: any):void {
       {isMobile && !isTablet?<Route path='/' element = {<><NavBarFull></NavBarFull><MobileHome lastPage = {lastPage} setLastPage = {setLastPage}></MobileHome></>}/> : <Route path='/' element = {<div style={{ height: "100vh", overflowY: showDisclaimer? "hidden" : "auto"}}><Disclaimer setShowDisclaimer = {setShowDisclaimer} showDisclaimer = {showDisclaimer}/><HomePageTop/><NavBarFull></NavBarFull><HomePage lastPage = {lastPage} setLastPage = {setLastPage}></HomePage></div>}/>}
       {isMobile && !isTablet? <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull><CreateMobile/></div>}/> : <Route path='/create' element={<div style={{overflow: "hidden"}}><NavBarFull></NavBarFull>
         <div className='flex'>
-        <CoursePick hoverCourse = {hoverCourse} clearCourse= {clearCourse} addHoverCourse = {addHoverCourse} removeHoverCourse = {removeHoverCourse} autoComplete = {autoComplete} handleColor = {handleColor} colorList = {colorList} setColorList = {setColorList} removeCourseCode = {removeCourseCode} courseInfoCache = {courseInfoCache} setCourseInfoCache = {setCourseInfoCache} lastPage = {lastPage} setLastPage = {setLastPage} removeCourse = {removeCourse} addCourse = {addCourse} courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked} setUpdate = {setUpdate} update = {update}></CoursePick>
+        <CoursePick school = {school} setSchool = {setSchool} hoverCourse = {hoverCourse} clearCourse= {clearCourse} addHoverCourse = {addHoverCourse} removeHoverCourse = {removeHoverCourse} autoComplete = {autoComplete} handleColor = {handleColor} colorList = {colorList} setColorList = {setColorList} removeCourseCode = {removeCourseCode} courseInfoCache = {courseInfoCache} setCourseInfoCache = {setCourseInfoCache} lastPage = {lastPage} setLastPage = {setLastPage} removeCourse = {removeCourse} addCourse = {addCourse} courseIndexPicked = {courseIndexPicked} setCourseIndexPicked = {setCourseIndexPicked} schedule = {schedule} setSchedule = {setSchedule} courseList = {courseList} setCourseList = {setCourseList} inputCode = {inputCode} courseInfo = {courseInfo} setCourseInfo = {setCourseInfo} coursePicked = {coursePicked} setCoursePicked = {setCoursePicked} setUpdate = {setUpdate} update = {update}></CoursePick>
         </div></div>}/>}
         
       {loggedIn? <Route path='/settings' element = {<><NavBarFull></NavBarFull><Settings handleLogOut = {handleLogOut}></Settings></>}/> : <Route path='/settings' element = {<Navigate to = "/" replace></Navigate>}/>}
