@@ -28,7 +28,7 @@ function MobileHome(props: any) {
                     <div className="border-2 p-2 border-r-0 flex justify-center text-center items-center" style={{width: "40vw", fontSize: ".8rem"}}>John Abbott College:</div><div className="border-2 p-2 flex justify-center" style={{width: "40vw", fontSize: ".8rem" }}>Fall 2023 (June 15th)</div>
                 </div>
                 <div className="flex flex-row">
-                    <div className="border-2 p-2 border-r-0 border-t-0 flex justify-center text-center items-center" style={{width: "40vw", fontSize: ".8rem"}}>Dawson College:</div><div className="border-2 border-t-0 p-2 flex justify-center" style={{width: "40vw", fontSize: ".8rem" }}>Coming Soon!</div>
+                    <div className="border-2 p-2 border-r-0 border-t-0 flex justify-center text-center items-center" style={{width: "40vw", fontSize: ".8rem"}}>Dawson College:</div><div className="border-2 border-t-0 p-2 flex justify-center" style={{width: "40vw", fontSize: ".8rem" }}>Fall 2023 (July 16th)</div>
                 </div>
                 <div className="flex flex-row">
                     <div className="border-2 p-2 border-r-0 border-t-0 flex justify-center text-center items-center" style={{width: "40vw", fontSize: ".8rem"}}>Vanier College:</div><div className="border-2 border-t-0 p-2 flex justify-center" style={{width: "40vw", fontSize: ".8rem" }}>Coming Soon!</div>
