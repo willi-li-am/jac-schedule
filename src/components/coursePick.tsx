@@ -513,7 +513,7 @@ const CoursePick = React.memo((prop: any) => {
 						Education Courses</a></>
                         : props.value["details"]["intensive"]
                     }</div> : <></>}
-                    {"details" in props.value && props.value["details"]["comment"] !== ""? <div key = {props.value["teacher"] + "comment" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}><span className = "text-white font-title">Comment:</span> {props.value["details"]["comment"]}</div> : <></>}
+                    {"details" in props.value && "comment" in props.value["details"]? <div key = {props.value["teacher"] + "comment" + props.value["courseCode"] + props.value["section"]} style={{fontSize: "12px"}}><span className = "text-white font-title">Comment:</span> {props.value["details"]["comment"]}</div> : <></>}
                 </div>
                 <div className="flex flex-col" key = {props.value["teacher"] + "schedule group" + props.value["courseCode"] + props.value["section"]}>
                     <div className="flex flex-col ml-2" style={{fontSize: "10px"}}>
