@@ -2,6 +2,13 @@
 
 Allows students from various CEGEPs to facilitate the creation of mock schedules, 1000 monthly users during course selection period
 
+### Links
+Link to project [here](https://www.jacschedule.com)
+
+(Data Collection Repository)[https://github.com/willi-li-am/jac-schedule-data]
+
+(Backend Repository)[https://github.com/willi-li-am/jac-schedule-backend]
+
 ## Project Status
 
 This is currently still in development with many more features planned to be added, but the core features are available.
