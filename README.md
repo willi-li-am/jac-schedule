@@ -6,7 +6,7 @@ Allows students from various CEGEPs to facilitate the creation of mock schedules
 
 This is currently still in development with many more features planned to be added, but the core features are available.
 
-### Pictures
+## Pictures
 
 #### 1. Selecting which CEGEP
 
@@ -19,3 +19,17 @@ This is currently still in development with many more features planned to be add
 #### 3. View of course list
 
 <img width="443" alt="image" src="https://github.com/willi-li-am/jac-schedule-frontend/assets/52115161/9604a614-811c-4133-9de7-09390d32f33e">
+
+## Tech Stack
+
+### Frontend
+- ReactJS
+- TailwindCSS
+
+### Backend
+- NodeJS
+- ExpressJS
+
+### Data Collection
+- Python
+
