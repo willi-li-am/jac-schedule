@@ -24,7 +24,8 @@ This is currently still in development with many more features planned to be add
 
 #### 2. View of course list
 
-<img width="443" alt="image" src="https://github.com/willi-li-am/jac-schedule/assets/52115161/9604a614-811c-4133-9de7-09390d32f33e">
+<img width="440" alt="image" src="https://github.com/willi-li-am/jac-schedule/assets/52115161/1133ccd8-be7d-45c2-a02c-9259f4c6967a">
+
 
 ## Tech Stack
 
