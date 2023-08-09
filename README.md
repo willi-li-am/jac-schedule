@@ -2,6 +2,8 @@
 
 Allows students from various CEGEPs to facilitate the creation of mock schedules, 1000 monthly users during course selection period
 
+(Improved version of <a href = "https://github.com/willi-li-am/schedule-maker">this project</a>)
+
 ### Links
 Link to project [here](https://www.jacschedule.com)
 
