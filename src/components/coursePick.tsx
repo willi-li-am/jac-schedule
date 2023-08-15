@@ -713,9 +713,11 @@ const CoursePick = React.memo((prop: any) => {
         catch{
             setLoading(false)
             alert("Failed to request course information, please try again later")
+            return -1
         }
         setLoading(false)
         alert("Failed to request course information, please try again later")
+        return -1
          //try to fix 2 time fetch
     }
 
@@ -793,10 +795,13 @@ const CoursePick = React.memo((prop: any) => {
         }
     }
 
-    function pickSchool(schoolid: string){
-        prop.setSchool(schoolid)
+    async function pickSchool(schoolid: string){
+        
 
-        getClassList(schoolid)
+        let returnVal = await getClassList(schoolid) 
+        if (returnVal !== -1) {
+            prop.setSchool(schoolid)
+        }
     }
 
 
