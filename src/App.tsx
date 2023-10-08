@@ -209,6 +209,7 @@ function App() { //add routes to make current page stuff so if reload, still on 
     setSchedule(scheduleObj)
     setCourseIndexPicked(coursePickedObj)
     setUpdate(!update)
+    console.log(scheduleObj);
 }
 
 function addHoverCourse(course: any, code: any){
