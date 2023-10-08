@@ -13,7 +13,6 @@ function Schedule (props: any) {
     const moreRef: any = useRef()
 
     useEffect(()=> {
-        console.log("Hi")
     },[props.hoverCourse.current])
 
     useEffect(() => {
@@ -50,7 +49,7 @@ function Schedule (props: any) {
     function ToSchedule(props:any){
         let courseScheduleList = []
         for (const day in props.course["schedule"]) {
-            if (day !== "" && day === "M") {
+            if (day === "M" && props.course["schedule"][day] != "") {
                 let format = timeToSchedule(props.course["schedule"][day])
                 let height = format[0]
                 let margin = format[1]
@@ -66,7 +65,7 @@ function Schedule (props: any) {
                     
                 </div>)
             }
-            else if (day !== "" && day === "T") {
+            else if (day === "T" && props.course["schedule"][day] != "") {
                 let format = timeToSchedule(props.course["schedule"][day])
                 let height = format[0]
                 let margin = format[1]
@@ -81,7 +80,7 @@ function Schedule (props: any) {
                     {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
                 </div>)
             }
-            else if (day !== "" && day === "W") {
+            else if (day === "W" && props.course["schedule"][day] != "") {
                 let format = timeToSchedule(props.course["schedule"][day])
                 let height = format[0]
                 let margin = format[1]
@@ -96,7 +95,7 @@ function Schedule (props: any) {
                     {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
                 </div>)
             }
-            else if (day !== "" && day === "R") {
+            else if (day === "R" && props.course["schedule"][day] != "") {
                 let format = timeToSchedule(props.course["schedule"][day])
                 let height = format[0]
                 let margin = format[1]
@@ -111,7 +110,7 @@ function Schedule (props: any) {
                     {props.course["type"] !== "custom"? <div style={{marginLeft: "8px", fontSize: "0.6rem"}}>{props.course["section"]}</div> : <></>}
                 </div>)
             }
-            else if (day !== "" && day === "F") {
+            else if (day === "F" && props.course["schedule"][day] != "") {
                 let format = timeToSchedule(props.course["schedule"][day])
                 let height = format[0]
                 let margin = format[1]
