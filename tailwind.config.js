@@ -1,11 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      colors:{
+      colors: {
         dark: "#2C343E",
         darker: "#292E34",
         nav: "#445262",
@@ -15,14 +13,13 @@ module.exports = {
         na: "#B8B8B8",
         link: "#3790FF",
         av: "#58c75b",
-        imp: "#fff700"
-      }
+        imp: "#fff700",
+      },
     },
     fontFamily: {
       title: ["wix-bold"],
-      navButton: ["wix-reg"]
-    }
+      navButton: ["wix-reg"],
+    },
   },
   plugins: [],
-}
-
+};
