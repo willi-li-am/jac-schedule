@@ -96,7 +96,7 @@ function MobileHome(props: any) {
             className="border-2 p-2 flex justify-center"
             style={{ width: "40vw", fontSize: ".8rem" }}
           >
-            Fall 2023 (June 15th)
+            Winter 2024
           </div>
         </div>
         <div className="flex flex-row">
@@ -110,7 +110,7 @@ function MobileHome(props: any) {
             className="border-2 border-t-0 p-2 flex justify-center"
             style={{ width: "40vw", fontSize: ".8rem" }}
           >
-            Fall 2023 (July 16th)
+            Winter 2024
           </div>
         </div>
         <div className="flex flex-row">

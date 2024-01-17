@@ -147,7 +147,7 @@ function HomePage(props: any) {
             className="border-2 p-2 flex justify-center"
             style={{ width: "200px" }}
           >
-            Winter 2024 (January 4th)
+            Winter 2024
           </div>
         </div>
         <div className="flex flex-row">
@@ -161,7 +161,7 @@ function HomePage(props: any) {
             className="border-2 border-t-0 p-2 flex justify-center"
             style={{ width: "200px" }}
           >
-            Fall 2023 (July 16th)
+            Winter 2024
           </div>
         </div>
         <div className="flex flex-row">
