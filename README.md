@@ -1,8 +1,6 @@
 # JAC Schedule
 
-Allows students from various CEGEPs to facilitate the creation of mock schedules, 1000 monthly users during course selection period
-
-(This is an improved version of <a href = "https://github.com/willi-li-am/schedule-maker">the old jac schedule</a>)
+Allows students from various CEGEPs to facilitate the creation of mock schedules
 
 ### Links
 
