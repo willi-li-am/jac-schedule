@@ -4,7 +4,7 @@ Allows students from various CEGEPs to facilitate the creation of mock schedules
 
 ### Links
 
-Link to project [here](https://www.jacschedule.com)
+Link to project [here](https://www.cegep.app)
 
 [Data Collection Repository](https://github.com/willi-li-am/jac-schedule-data)
 
