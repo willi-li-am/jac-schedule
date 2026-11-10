@@ -548,7 +548,6 @@ function Schedule(props: any) {
                     if (code in props.courseIndexPicked) {
                       let courseIndex = props.courseIndexPicked[code];
                       let course = props.courseInfo[index][courseIndex];
-                      course["type"] = "course";
                       let color = props.colorList[code].background;
                       return (
                         <ToSchedule

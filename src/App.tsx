@@ -105,37 +105,17 @@ function App() {
   const hoverCourse: any = useRef({});
 
   function removeCourseCode(code: string) {
-    let index = coursePicked.indexOf(code);
+    const index = coursePicked.indexOf(code);
+    if (index === -1) return;
 
-    if (code in courseIndexPicked) {
-      let courseIndex = courseIndexPicked[code];
-      let course = courseInfo[index][courseIndex];
-      let scheduleObj = schedule;
-      let coursePickedObj = courseIndexPicked;
-      for (const day in scheduleObj) {
-        const targetElementIndex = scheduleObj[day].indexOf(
-          course["schedule"][day],
-        );
-        scheduleObj[day].splice(targetElementIndex);
-      }
-
-      delete coursePickedObj[code];
-
-      setSchedule(scheduleObj);
-      setCourseIndexPicked(coursePickedObj);
-    }
-
-    let courseArr = coursePicked;
-    courseArr.splice(index, 1);
-    setCoursePicked(courseArr);
-
-    let courseInfoVar = courseInfo;
-    courseInfoVar.splice(index, 1);
-    setCourseInfo(courseInfoVar);
-
+    removeCourse(courseInfo[index]?.[courseIndexPicked[code]], code);
+    setCoursePicked(
+      coursePicked.filter((_: string, position: number) => position !== index),
+    );
+    setCourseInfo(
+      courseInfo.filter((_: unknown, position: number) => position !== index),
+    );
     hoverCourse.current = {};
-
-    setUpdate(!update);
   }
 
   function switchLoginPage(target: number) {
@@ -216,11 +196,7 @@ function App() {
   }
 
   function addHoverCourse(course: any, code: any) {
-    let hover = hoverCourse.current;
-    hover["code"] = code;
-    hover["course"] = course;
-    hover["course"]["type"] = "hover";
-    hoverCourse.current = hover;
+    hoverCourse.current = { code, course: { ...course, type: "hover" } };
     setUpdateSchedule(!updateSchedule);
   }
 
@@ -231,20 +207,25 @@ function App() {
     setUpdateSchedule(!updateSchedule);
   }
 
-  function removeCourse(course: any, code: any) {
-    let scheduleObj = schedule;
-    let coursePickedObj = courseIndexPicked;
-    for (const day in scheduleObj) {
-      const targetElementIndex = scheduleObj[day].indexOf(
-        course["schedule"][day],
-      );
-      scheduleObj[day].splice(targetElementIndex, 1);
+  function removeCourse(course: any, code: string) {
+    if (!Object.prototype.hasOwnProperty.call(courseIndexPicked, code)) return;
+
+    if (course?.schedule) {
+      const nextSchedule = { ...schedule };
+      for (const day in schedule) {
+        const times = schedule[day];
+        const index = times.indexOf(course.schedule[day]);
+        if (index !== -1) {
+          nextSchedule[day] = [...times.slice(0, index), ...times.slice(index + 1)];
+        }
+      }
+      setSchedule(nextSchedule);
     }
 
-    delete coursePickedObj[code];
+    const nextCourseIndexes = { ...courseIndexPicked };
+    delete nextCourseIndexes[code];
+    setCourseIndexPicked(nextCourseIndexes);
     hoverCourse.current = {};
-    setSchedule(scheduleObj);
-    setCourseIndexPicked(coursePickedObj);
     setUpdate(!update);
   }
 

@@ -20,10 +20,76 @@ import React from "react";
 import { isPropertySignature } from "typescript";
 import SchoolPick from "./schoolPick";
 
+const catalogBase = process.env.REACT_APP_CATALOG_URL ?? (
+  process.env.NODE_ENV === "development" ? "" : "https://jacschedule-api.vercel.app"
+);
+
+async function fetchCatalog(path: string, signal: AbortSignal): Promise<unknown[]> {
+  const response = await fetch(`${catalogBase.replace(/\/$/, "")}/course/${path}`, {
+    credentials: "omit",
+    signal,
+  });
+  if (!response.ok) throw new Error(`Course catalog request failed (${response.status})`);
+
+  const data: unknown = await response.json();
+  if (!Array.isArray(data)) throw new Error("Invalid course catalog response");
+  return data;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function isDisplayValue(value: unknown): boolean {
+  return value == null || ["string", "number", "boolean"].includes(typeof value);
+}
+
+function isRating(value: unknown): boolean {
+  return value == null || value === "DNE" || (
+    isRecord(value) &&
+    isDisplayValue(value.rating) &&
+    isDisplayValue(value.reviews) &&
+    (value.link == null || typeof value.link === "string" && /^https?:\/\//i.test(value.link))
+  );
+}
+
+function isMeetingTime(value: unknown): boolean {
+  if (value === "") return true;
+  if (typeof value !== "string" || !/^\d{1,2}[0-5]\d-\d{1,2}[0-5]\d$/.test(value)) return false;
+  const [start, end] = value.split("-").map(Number);
+  return start < end && end <= 2400;
+}
+
+function isCatalogSection(value: unknown, requestedCode: string): boolean {
+  if (!isRecord(value)) return false;
+  const { section, title, schedule, courseCode, teacher, domain, ensemble, details, lab, rating } = value;
+  if (
+    typeof section !== "string" || !section.trim() || typeof title !== "string" ||
+    (requestedCode === "COMPLEMENTARY" && (typeof courseCode !== "string" || !courseCode.trim())) ||
+    ![courseCode, teacher, domain, ensemble].every(isDisplayValue) ||
+    !isRecord(schedule) ||
+    !["M", "T", "W", "R", "F"].every(day => isMeetingTime(schedule[day])) ||
+    !isRating(rating)
+  ) return false;
+
+  if (details !== undefined && (
+    !isRecord(details) ||
+    !["fee", "restrict", "exclusive", "blended", "intensive", "comment"].every(key => isDisplayValue(details[key]))
+  )) return false;
+
+  return lab === undefined || isRecord(lab) && isDisplayValue(lab.teacher) && isRating(lab.rating);
+}
+
 const CoursePick = React.memo((prop: any) => {
   const [showColor, setShowColor]: any = useState({});
-  const [loading, setLoading]: any = useState(false);
-  const [itemsList, setItemsList] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const activeRequest = useRef<AbortController | null>(null);
+
+  useEffect(() => () => {
+    const request = activeRequest.current;
+    activeRequest.current = null;
+    request?.abort();
+  }, []);
 
   const inputCode: any = useRef("");
 
@@ -48,15 +114,6 @@ const CoursePick = React.memo((prop: any) => {
     FE: useRef(""),
   };
   const [viewCourse, setViewCourse]: any = useState({});
-
-  function itemsToList(courseList: string[]) {
-    let itemsListList: any = [];
-    for (let i = 0; i < courseList.length; i++) {
-      itemsListList.push({ id: i, name: courseList[i] });
-      prop.autoComplete.current.insert(courseList[i]);
-    }
-    setItemsList(itemsListList);
-  }
 
   function sectionMaker(input: number): string {
     if (input / 10000 >= 1) return input.toString();
@@ -661,7 +718,7 @@ const CoursePick = React.memo((prop: any) => {
           />{" "}
           <div>{props.value["section"]}</div>
         </div>
-        {props.value["rating"] == "DNE" ? (
+        {!props.value["rating"] || props.value["rating"] === "DNE" ? (
           <div
             key={
               props.value["teacher"] +
@@ -764,7 +821,7 @@ const CoursePick = React.memo((prop: any) => {
                       {props.value["lab"]["teacher"]}
                     </div>
                   </div>
-                  {props.value["lab"]["rating"] == "DNE" ? (
+                  {!props.value["lab"]["rating"] || props.value["lab"]["rating"] === "DNE" ? (
                     <div
                       key={
                         props.value["lab"]["teacher"] +
@@ -2158,123 +2215,80 @@ const CoursePick = React.memo((prop: any) => {
     );
   }
 
-  async function getClassList(school_id: string) {
+  async function runCatalogRequest(action: (signal: AbortSignal) => Promise<void>, failureMessage: string) {
+    if (activeRequest.current) return;
+
+    const request = new AbortController();
+    activeRequest.current = request;
+    const timeout = setTimeout(() => request.abort(), 12_000);
     setLoading(true);
-    let response: any;
     try {
-      response = await fetch(
-        "https://jacschedule-api.vercel.app/course/search/" + school_id,
-      );
-      if (response.status !== 200) response = false;
-      for (let i = 0; i < 2; i++) {
-        if (response === false) {
-          await fetch(
-            "https://jacschedule-api.vercel.app/course/search/" + school_id,
-          ).then((r) =>
-            r.status === 200 ? (response = r) : (response = false),
-          );
-        } else if (response.status === 200) {
-          setTimeout(() => setLoading(false), 200);
-          let json = await response.json();
-          prop.setCourseList(json);
-
-          itemsToList(json);
-
-          return json;
-        }
-      }
+      await action(request.signal);
     } catch {
-      setLoading(false);
-      alert("Failed to request course information, please try again later");
-      return -1;
-    }
-    setLoading(false);
-    alert("Failed to request course information, please try again later");
-    return -1;
-    //try to fix 2 time fetch
-  }
-
-  async function handleFormSubmit(
-    event: any,
-    school_id: string,
-    input: string,
-  ) {
-    setLoading(true);
-    event.preventDefault();
-    let code = input.toUpperCase();
-    let courseInfoJson: any;
-    let response: any = prop.courseList;
-    if (prop.courseList === "") {
-      response = await getClassList(school_id);
-    }
-    if (response.includes(code) && !prop.coursePicked.includes(code)) {
-      if (code in prop.courseInfoCache) {
-        let input = [code, ...prop.coursePicked];
-        prop.setCoursePicked(input);
-
-        let courseInfoJson = prop.courseInfoCache[code];
-        let courseInfoInput = [courseInfoJson, ...prop.courseInfo];
-        prop.setCourseInfo(courseInfoInput);
+      if (activeRequest.current === request) alert(failureMessage);
+    } finally {
+      clearTimeout(timeout);
+      if (activeRequest.current === request) {
+        activeRequest.current = null;
         setLoading(false);
-      } else {
-        try {
-          //fetch again if courselist is empty
-
-          response = await fetch(
-            "https://jacschedule-api.vercel.app/course/" + school_id + "/" + code,
-          );
-
-          if (response.status !== 200) response = false;
-          for (let i = 0; i < 2; i++) {
-            if (response === false) {
-              await fetch(
-                "https://jacschedule-api.vercel.app/course/" + school_id + "/" + code,
-              ).then((r) =>
-                r.status === 200 ? (response = r) : (response = false),
-              );
-            } else if (response.status === 200) {
-              courseInfoJson = await response.json();
-              let input = [code, ...prop.coursePicked];
-              prop.setCoursePicked(input);
-
-              let courseInfoInput = [courseInfoJson, ...prop.courseInfo];
-              prop.setCourseInfo(courseInfoInput);
-
-              let cache = prop.courseInfoCache;
-              cache[code] = courseInfoJson;
-              prop.setCourseInfoCache(cache);
-
-              let colors = prop.colorList;
-              colors[code] = { background: "#394351" };
-
-              prop.setColorList(colors);
-
-              setLoading(false);
-              inputCode.current.value = "";
-              return true;
-            }
-          }
-        } catch {
-          setLoading(false);
-          alert("Unable to Retrieve Course Information, please try again");
-        }
       }
-    } else if (prop.coursePicked.includes(code)) {
-      setLoading(false);
-      alert("This course has already been added");
-    } else {
-      setLoading(false);
-      alert(
-        "Course does not exist. If it does then it may have not been written in format: XXX-XXX-XX or it's a technical program course (add custom course)",
-      );
     }
   }
 
-  async function pickSchool(schoolid: string) {
-    let returnVal = await getClassList(schoolid);
-    if (returnVal !== -1) {
-      prop.setSchool(schoolid);
+  async function getClassList(school: string, signal: AbortSignal): Promise<string[]> {
+    const data = await fetchCatalog(`search/${school}`, signal);
+    if (!data.every((code): code is string => typeof code === "string")) {
+      throw new Error("Invalid course code list");
     }
+    if (!signal.aborted) {
+      data.forEach(code => prop.autoComplete.current.insert(code));
+      prop.setCourseList(data);
+    }
+    return data;
+  }
+
+  async function handleFormSubmit(event: React.SyntheticEvent, school: string, input: string) {
+    event.preventDefault();
+    if (!school || activeRequest.current) return;
+
+    const code = input.trim().toUpperCase();
+    if (prop.coursePicked.includes(code)) {
+      alert("This course has already been added");
+      return;
+    }
+
+    await runCatalogRequest(async signal => {
+      const codes = Array.isArray(prop.courseList) ? prop.courseList : await getClassList(school, signal);
+      if (signal.aborted) return;
+      if (!codes.includes(code)) {
+        alert(
+          "Course does not exist. If it does then it may have not been written in format: XXX-XXX-XX or it's a technical program course (add custom course)",
+        );
+        return;
+      }
+
+      const cachedSections = prop.courseInfoCache[code];
+      const sections = cachedSections ?? await fetchCatalog(`${school}/${encodeURIComponent(code)}`, signal);
+      if (signal.aborted) return;
+      if (!Array.isArray(sections) || !sections.length || !sections.every(section => isCatalogSection(section, code))) {
+        throw new Error("Invalid course sections");
+      }
+
+      prop.setCoursePicked((picked: string[]) => [code, ...picked]);
+      prop.setCourseInfo((courseInfo: unknown[] | "") => [sections, ...courseInfo]);
+      if (!cachedSections) {
+        prop.setCourseInfoCache((cache: object) => ({ ...cache, [code]: sections }));
+        prop.setColorList((colors: object) => ({ ...colors, [code]: { background: "#394351" } }));
+      }
+      if (inputCode.current) inputCode.current.value = "";
+    }, "Unable to Retrieve Course Information, please try again");
+  }
+
+  async function pickSchool(school: string) {
+    await runCatalogRequest(async signal => {
+      await getClassList(school, signal);
+      if (!signal.aborted) prop.setSchool(school);
+    }, "Failed to request course information, please try again later");
   }
 
   return (
